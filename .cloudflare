@@ -1,0 +1,66 @@
+# Cloudflare Pages 部署配置
+
+## 部署步骤
+
+### 方法1: 使用 Wrangler CLI
+
+1. 安装 Wrangler:
+```bash
+npm install -g wrangler
+```
+
+2. 登录 Cloudflare:
+```bash
+wrangler login
+```
+
+3. 部署到 Cloudflare Pages:
+```bash
+wrangler pages deploy dist
+```
+
+### 方法2: 使用 GitHub Actions 自动部署
+
+在 `.github/workflows/deploy.yml` 创建:
+
+```yaml
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'pnpm'
+      - run: pnpm install
+      - run: pnpm build
+      - uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: study-python1
+          directory: dist
+```
+
+### 方法3: 通过 Cloudflare Dashboard 手动部署
+
+1. 访问 https://pages.cloudflare.com/
+2. 点击 "Create a project"
+3. 选择 "Upload assets directly"
+4. 上传 `dist` 文件夹内容
+
+## 注意事项
+
+- 确保 `dist` 文件夹已构建: `pnpm build`
+- 项目根目录的 `wrangler.toml` 已配置
+- 部署前检查 `dist/index.html` 是否存在
