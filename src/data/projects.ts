@@ -12,6 +12,7 @@ export interface Project {
   starterCode: string;
   solutionCode: string;
   learningPoints: string[];
+  quizzes?: QuizItem[];
 }
 
 export interface ProjectSection {
@@ -19,6 +20,7 @@ export interface ProjectSection {
   title: string;
   content: string;
   codeExample?: string;
+  quizzes?: QuizItem[];
 }
 
 export interface Course {
@@ -36,12 +38,22 @@ export interface CourseChapter {
   content: string;
   examples: string[];
   exercises: Exercise[];
+  quizzes?: QuizItem[];
 }
 
 export interface Exercise {
   id: number;
   question: string;
   solution: string;
+}
+
+export interface QuizItem {
+  id: number;
+  type: 'multiple_choice' | 'true_false';
+  question: string;
+  options?: string[];
+  correctAnswer: string | boolean;
+  explanation?: string;
 }
 
 export const projects: Project[] = [
@@ -78,7 +90,32 @@ print("销售数据:")
 print(sales_data.head())
 print("\\n数据形状:", sales_data.shape)
 print("\\n数据类型:")
-print(sales_data.dtypes)`
+print(sales_data.dtypes)`,
+        quizzes: [
+          {
+            id: 1,
+            type: 'multiple_choice',
+            question: '以下哪个方法用于查看 DataFrame 的前几行？',
+            options: ['head()', 'tail()', 'first()', 'top()'],
+            correctAnswer: 'head()',
+            explanation: 'head() 方法默认显示 DataFrame 的前 5 行数据。'
+          },
+          {
+            id: 2,
+            type: 'true_false',
+            question: 'DataFrame 的 shape 属性返回 (行数, 列数)。',
+            correctAnswer: true,
+            explanation: 'shape 属性返回一个元组，第一个元素是行数，第二个是列数。'
+          },
+          {
+            id: 3,
+            type: 'multiple_choice',
+            question: '以下哪个属性用于查看每列的数据类型？',
+            options: ['types', 'dtypes', 'datatypes', 'type_info'],
+            correctAnswer: 'dtypes',
+            explanation: 'dtypes 属性返回每列的数据类型。'
+          }
+        ]
       },
       {
         id: 'data-cleaning',
@@ -95,7 +132,31 @@ print("重复行数:", sales_data.duplicated().sum())
 sales_data = sales_data.drop_duplicates()
 
 # 转换日期格式
-sales_data['order_date'] = pd.to_datetime(sales_data['order_date'])`
+sales_data['order_date'] = pd.to_datetime(sales_data['order_date'])`,
+        quizzes: [
+          {
+            id: 1,
+            type: 'true_false',
+            question: 'isnull() 方法返回一个布尔值 DataFrame。',
+            correctAnswer: true,
+            explanation: 'isnull() 对每个元素检查是否为缺失值，返回布尔值。'
+          },
+          {
+            id: 2,
+            type: 'multiple_choice',
+            question: 'sum() 结合 isnull() 用于什么？',
+            options: ['计算总和', '统计每列缺失值数量', '删除缺失值', '填充缺失值'],
+            correctAnswer: '统计每列缺失值数量',
+            explanation: 'isnull().sum() 可以统计每列的缺失值数量。'
+          },
+          {
+            id: 3,
+            type: 'true_false',
+            question: 'drop_duplicates() 会删除所有重复的行。',
+            correctAnswer: true,
+            explanation: 'drop_duplicates() 方法用于删除 DataFrame 中的重复行。'
+          }
+        ]
       },
       {
         id: 'analysis',
@@ -117,7 +178,32 @@ plt.show()
 # 热销商品排行
 product_sales = sales_data.groupby('product_id')['quantity'].sum().sort_values(ascending=False)
 print("热销商品 TOP 10:")
-print(product_sales.head(10))`
+print(product_sales.head(10))`,
+        quizzes: [
+          {
+            id: 1,
+            type: 'multiple_choice',
+            question: 'groupby() 方法用于什么？',
+            options: ['删除数据', '分组聚合', '排序数据', '合并数据'],
+            correctAnswer: '分组聚合',
+            explanation: 'groupby() 用于按指定列分组，然后可以进行聚合操作。'
+          },
+          {
+            id: 2,
+            type: 'true_false',
+            question: 'sort_values(ascending=False) 会按降序排序。',
+            correctAnswer: true,
+            explanation: 'ascending=False 表示降序排列。'
+          },
+          {
+            id: 3,
+            type: 'multiple_choice',
+            question: 'plt.figure(figsize=(12, 6)) 用于什么？',
+            options: ['创建数据', '设置图表大小', '保存图表', '显示图表'],
+            correctAnswer: '设置图表大小',
+            explanation: 'figsize 参数用于设置图表的宽度和高度（单位：英寸）。'
+          }
+        ]
       }
     ],
     starterCode: `import pandas as pd
@@ -543,6 +629,38 @@ export const courses: Course[] = [
             question: '创建一个列表，包含1-10的数字，然后计算它们的和',
             solution: 'numbers = list(range(1, 11))\nsum(numbers)'
           }
+        ],
+        quizzes: [
+          {
+            id: 1,
+            type: 'multiple_choice',
+            question: 'Python 中用于定义变量的关键字是？',
+            options: ['var', 'let', '直接命名', 'def'],
+            correctAnswer: '直接命名',
+            explanation: 'Python 不需要关键字声明变量，直接赋值即可创建变量。'
+          },
+          {
+            id: 2,
+            type: 'true_false',
+            question: 'Python 是一种强类型语言。',
+            correctAnswer: true,
+            explanation: 'Python 是强类型语言，不允许隐式类型转换。'
+          },
+          {
+            id: 3,
+            type: 'multiple_choice',
+            question: '以下哪个是 Python 的注释符号？',
+            options: ['//', '/* */', '#', '--'],
+            correctAnswer: '#',
+            explanation: 'Python 使用 # 作为单行注释符号。'
+          },
+          {
+            id: 4,
+            type: 'true_false',
+            question: 'Python 中变量名可以以数字开头。',
+            correctAnswer: false,
+            explanation: 'Python 变量名不能以数字开头，必须以字母或下划线开头。'
+          }
         ]
       },
       {
@@ -559,6 +677,46 @@ export const courses: Course[] = [
             question: '创建一个字典，存储学生姓名和成绩，然后找出最高分的学生',
             solution: 'students = {"小明": 85, "小红": 92, "小刚": 78}\nmax(students.items(), key=lambda x: x[1])'
           }
+        ],
+        quizzes: [
+          {
+            id: 1,
+            type: 'multiple_choice',
+            question: 'Python 中用于创建不可变序列的数据结构是？',
+            options: ['列表', '字典', '元组', '集合'],
+            correctAnswer: '元组',
+            explanation: '元组（tuple）是不可变序列，创建后不能修改其元素。'
+          },
+          {
+            id: 2,
+            type: 'true_false',
+            question: '字典的键必须是不可变类型。',
+            correctAnswer: true,
+            explanation: '字典的键必须是不可变的，如字符串、数字或元组。'
+          },
+          {
+            id: 3,
+            type: 'multiple_choice',
+            question: '以下哪个方法用于向列表末尾添加元素？',
+            options: ['append()', 'extend()', 'insert()', 'add()'],
+            correctAnswer: 'append()',
+            explanation: 'append() 方法用于向列表末尾添加单个元素。'
+          },
+          {
+            id: 4,
+            type: 'true_false',
+            question: '集合可以包含重复元素。',
+            correctAnswer: false,
+            explanation: '集合中的元素是唯一的，不能有重复值。'
+          },
+          {
+            id: 5,
+            type: 'multiple_choice',
+            question: '访问字典中不存在的键会抛出什么异常？',
+            options: ['KeyError', 'ValueError', 'IndexError', 'TypeError'],
+            correctAnswer: 'KeyError',
+            explanation: '访问字典中不存在的键会抛出 KeyError 异常。'
+          }
         ]
       },
       {
@@ -574,6 +732,46 @@ export const courses: Course[] = [
             id: 1,
             question: '编写一个函数，判断一个数是否是素数',
             solution: 'def is_prime(n):\n    if n < 2:\n        return False\n    for i in range(2, int(n**0.5) + 1):\n        if n % i == 0:\n            return False\n    return True'
+          }
+        ],
+        quizzes: [
+          {
+            id: 1,
+            type: 'multiple_choice',
+            question: 'Python 中用于定义函数的关键字是？',
+            options: ['function', 'def', 'func', 'define'],
+            correctAnswer: 'def',
+            explanation: 'Python 使用 def 关键字来定义函数。'
+          },
+          {
+            id: 2,
+            type: 'true_false',
+            question: 'Python 函数可以返回多个值。',
+            correctAnswer: true,
+            explanation: 'Python 函数可以通过元组返回多个值。'
+          },
+          {
+            id: 3,
+            type: 'multiple_choice',
+            question: '以下哪个是正确的模块导入方式？',
+            options: ['import math', 'include math', 'using math', 'load math'],
+            correctAnswer: 'import math',
+            explanation: 'Python 使用 import 语句导入模块。'
+          },
+          {
+            id: 4,
+            type: 'true_false',
+            question: '函数参数必须有默认值。',
+            correctAnswer: false,
+            explanation: '函数参数可以有默认值，也可以没有，不是必须的。'
+          },
+          {
+            id: 5,
+            type: 'multiple_choice',
+            question: 'lambda 函数是什么类型的函数？',
+            options: ['命名函数', '匿名函数', '递归函数', '异步函数'],
+            correctAnswer: '匿名函数',
+            explanation: 'lambda 函数是匿名函数，用于创建简单的单行函数。'
           }
         ]
       }
@@ -601,6 +799,38 @@ export const courses: Course[] = [
             question: '创建一个 DataFrame，包含产品名、价格和销量，然后计算总销售额',
             solution: 'df = pd.DataFrame({"product": ["A", "B"], "price": [10, 20], "sales": [5, 3]})\ndf["revenue"] = df["price"] * df["sales"]'
           }
+        ],
+        quizzes: [
+          {
+            id: 1,
+            type: 'multiple_choice',
+            question: 'Pandas 中用于创建二维表格的数据结构是？',
+            options: ['Series', 'DataFrame', 'Array', 'Matrix'],
+            correctAnswer: 'DataFrame',
+            explanation: 'DataFrame 是 Pandas 的核心二维表格数据结构。'
+          },
+          {
+            id: 2,
+            type: 'true_false',
+            question: 'DataFrame 的列名必须是字符串类型。',
+            correctAnswer: false,
+            explanation: 'DataFrame 的列名可以是任意可哈希类型，不一定是字符串。'
+          },
+          {
+            id: 3,
+            type: 'multiple_choice',
+            question: '以下哪个方法用于读取 CSV 文件？',
+            options: ['read_excel()', 'read_csv()', 'load_csv()', 'open_csv()'],
+            correctAnswer: 'read_csv()',
+            explanation: 'pd.read_csv() 是 Pandas 用于读取 CSV 文件的标准方法。'
+          },
+          {
+            id: 4,
+            type: 'true_false',
+            question: '使用 df["列名"] 可以选择 DataFrame 的列。',
+            correctAnswer: true,
+            explanation: '使用方括号和列名是选择 DataFrame 列的常用方法。'
+          }
         ]
       },
       {
@@ -616,6 +846,38 @@ export const courses: Course[] = [
             id: 1,
             question: '读取一个 CSV 文件，处理其中的缺失值，然后转换日期列',
             solution: 'df = pd.read_csv("data.csv")\ndf = df.fillna(df.mean())\ndf["date"] = pd.to_datetime(df["date"])'
+          }
+        ],
+        quizzes: [
+          {
+            id: 1,
+            type: 'multiple_choice',
+            question: '以下哪个方法用于删除包含缺失值的行？',
+            options: ['dropna()', 'fillna()', 'delete()', 'remove()'],
+            correctAnswer: 'dropna()',
+            explanation: 'dropna() 方法用于删除包含缺失值的行或列。'
+          },
+          {
+            id: 2,
+            type: 'true_false',
+            question: 'fillna(0) 会用 0 填充所有缺失值。',
+            correctAnswer: true,
+            explanation: 'fillna() 方法可以用指定值填充缺失值。'
+          },
+          {
+            id: 3,
+            type: 'multiple_choice',
+            question: 'pd.to_datetime() 用于什么？',
+            options: ['转换为字符串', '转换为日期时间', '转换为数字', '转换为布尔值'],
+            correctAnswer: '转换为日期时间',
+            explanation: 'pd.to_datetime() 用于将数据转换为日期时间类型。'
+          },
+          {
+            id: 4,
+            type: 'true_false',
+            question: 'duplicated() 方法用于查找重复行。',
+            correctAnswer: true,
+            explanation: 'duplicated() 方法返回布尔值，表示哪些行是重复的。'
           }
         ]
       }

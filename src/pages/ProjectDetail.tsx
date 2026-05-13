@@ -23,6 +23,8 @@ export default function ProjectDetail() {
   const [code, setCode] = useState('');
   const [showSolution, setShowSolution] = useState(false);
   const [completedSections, setCompletedSections] = useState<string[]>([]);
+  const [quizAnswers, setQuizAnswers] = useState<Record<number, string | boolean>>({});
+  const [quizResults, setQuizResults] = useState<Record<number, boolean>>({});
 
   if (!project) {
     return (
@@ -51,6 +53,16 @@ export default function ProjectDetail() {
     if (!completedSections.includes(sectionId)) {
       setCompletedSections([...completedSections, sectionId]);
     }
+  };
+
+  const handleQuizAnswer = (quizId: number, answer: string | boolean) => {
+    setQuizAnswers(prev => ({ ...prev, [quizId]: answer }));
+  };
+
+  const checkQuizAnswer = (quizId: number, correctAnswer: string | boolean) => {
+    const userAnswer = quizAnswers[quizId];
+    const isCorrect = userAnswer === correctAnswer;
+    setQuizResults(prev => ({ ...prev, [quizId]: isCorrect }));
   };
 
   const progress = (completedSections.length / project.sections.length) * 100;
@@ -266,6 +278,145 @@ export default function ProjectDetail() {
                     ))}
                   </div>
                 </div>
+
+                {/* 选择题和判断题 */}
+                {activeSectionData?.quizzes && activeSectionData.quizzes.length > 0 && (
+                  <div className="mt-8 pt-8 border-t border-gray-100">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                      <Star className="w-5 h-5 text-purple-500" />
+                      章节测验
+                    </h3>
+                    <div className="space-y-6">
+                      {activeSectionData.quizzes.map((quiz, idx) => (
+                        <div key={quiz.id} className="border border-gray-200 rounded-lg p-6 bg-white">
+                          <div className="flex items-start gap-3 mb-4">
+                            <span className="flex-shrink-0 w-8 h-8 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center font-bold text-sm">
+                              {idx + 1}
+                            </span>
+                            <div className="flex-1">
+                              <span className="inline-block px-2 py-1 text-xs font-medium rounded mb-2 mr-2 bg-blue-100 text-blue-700">
+                                {quiz.type === 'multiple_choice' ? '选择题' : '判断题'}
+                              </span>
+                              <h4 className="font-medium text-gray-900 text-lg">{quiz.question}</h4>
+                            </div>
+                          </div>
+
+                          {quiz.type === 'multiple_choice' && quiz.options && (
+                            <div className="space-y-2 ml-11">
+                              {quiz.options.map((option, optIdx) => {
+                                const isSelected = quizAnswers[quiz.id] === option;
+                                const showResult = quizResults[quiz.id] !== undefined;
+                                const isCorrect = option === quiz.correctAnswer;
+                                
+                                let buttonClass = 'w-full text-left px-4 py-3 border rounded-lg transition-colors';
+                                if (showResult) {
+                                  if (isCorrect) {
+                                    buttonClass += ' bg-green-50 border-green-300 text-green-800';
+                                  } else if (isSelected) {
+                                    buttonClass += ' bg-red-50 border-red-300 text-red-800';
+                                  }
+                                } else if (isSelected) {
+                                  buttonClass += ' bg-blue-50 border-blue-300 text-blue-800';
+                                } else {
+                                  buttonClass += ' hover:bg-gray-50 border-gray-200 text-gray-700';
+                                }
+
+                                return (
+                                  <button
+                                    key={optIdx}
+                                    onClick={() => handleQuizAnswer(quiz.id, option)}
+                                    disabled={showResult}
+                                    className={buttonClass}
+                                  >
+                                    <div className="flex items-center gap-3">
+                                      <span className="w-6 h-6 rounded-full border flex items-center justify-center font-medium text-sm">
+                                        {String.fromCharCode(65 + optIdx)}
+                                      </span>
+                                      <span>{option}</span>
+                                      {showResult && isCorrect && (
+                                        <Check className="w-5 h-5 text-green-600 ml-auto" />
+                                      )}
+                                    </div>
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          )}
+
+                          {quiz.type === 'true_false' && (
+                            <div className="flex gap-4 ml-11">
+                              {[true, false].map((option) => {
+                                const isSelected = quizAnswers[quiz.id] === option;
+                                const showResult = quizResults[quiz.id] !== undefined;
+                                const isCorrect = option === quiz.correctAnswer;
+                                
+                                let buttonClass = 'px-6 py-3 border rounded-lg font-medium transition-colors';
+                                if (showResult) {
+                                  if (isCorrect) {
+                                    buttonClass += ' bg-green-50 border-green-300 text-green-800';
+                                  } else if (isSelected) {
+                                    buttonClass += ' bg-red-50 border-red-300 text-red-800';
+                                  }
+                                } else if (isSelected) {
+                                  buttonClass += ' bg-blue-50 border-blue-300 text-blue-800';
+                                } else {
+                                  buttonClass += ' hover:bg-gray-50 border-gray-200 text-gray-700';
+                                }
+
+                                return (
+                                  <button
+                                    key={String(option)}
+                                    onClick={() => handleQuizAnswer(quiz.id, option)}
+                                    disabled={showResult}
+                                    className={buttonClass}
+                                  >
+                                    {option ? '正确' : '错误'}
+                                    {showResult && isCorrect && (
+                                      <Check className="w-4 h-4 text-green-600 ml-2 inline" />
+                                    )}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          )}
+
+                          <div className="mt-4 ml-11">
+                            {quizResults[quiz.id] === undefined ? (
+                              <button
+                                onClick={() => checkQuizAnswer(quiz.id, quiz.correctAnswer)}
+                                disabled={quizAnswers[quiz.id] === undefined}
+                                className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                              >
+                                提交答案
+                              </button>
+                            ) : (
+                              <div className={`p-4 rounded-lg ${quizResults[quiz.id] ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
+                                <div className="flex items-center gap-2 font-medium mb-2">
+                                  {quizResults[quiz.id] ? (
+                                    <>
+                                      <Check className="w-5 h-5 text-green-600" />
+                                      <span className="text-green-800">回答正确！</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <span className="text-red-800">回答错误</span>
+                                    </>
+                                  )}
+                                </div>
+                                {quiz.explanation && (
+                                  <div className="text-gray-700">
+                                    <span className="font-medium">解析：</span>
+                                    {quiz.explanation}
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* 底部导航 */}
                 <div className="mt-12 pt-8 border-t border-gray-100 flex items-center justify-between">
