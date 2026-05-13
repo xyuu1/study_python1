@@ -1,4 +1,5 @@
 import { Clock, Star, ChevronRight, BarChart3, Brain, TrendingUp, PieChart } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { projects, type Project } from '../data/projects';
 
 const difficultyColors = {
@@ -20,7 +21,7 @@ function ProjectCard({ project }: { project: Project }) {
   const IconComponent = categoryIcons[project.category] || BarChart3;
 
   return (
-    <div className="group bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-xl hover:border-blue-200 transition-all duration-300">
+    <Link to={`/projects/${project.id}`} className="group bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-xl hover:border-blue-200 transition-all duration-300 block">
       <div className="flex items-start justify-between mb-4">
         <div className={`w-12 h-12 ${diff.bg} rounded-xl flex items-center justify-center`}>
           <IconComponent className={`w-6 h-6 ${diff.text}`} />
@@ -56,12 +57,12 @@ function ProjectCard({ project }: { project: Project }) {
           <Clock className="w-4 h-4" />
           <span className="text-sm">{project.estimatedHours}小时</span>
         </div>
-        <button className="flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium">
+        <span className="flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium">
           开始项目
           <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-        </button>
+        </span>
       </div>
-    </div>
+    </Link>
   );
 }
 

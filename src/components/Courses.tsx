@@ -1,4 +1,5 @@
 import { BookOpen, Clock, ChevronRight, Code2, BarChart2, LineChart, Brain } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { courses } from '../data/projects';
 
 const courseIcons: Record<string, typeof Code2> = {
@@ -29,7 +30,7 @@ export default function Courses() {
           {courses.map((course) => {
             const IconComponent = courseIcons[course.title] || BookOpen;
             return (
-              <div key={course.id} className="group bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-100 p-6 hover:shadow-xl hover:border-teal-200 transition-all duration-300">
+              <Link to={`/courses/${course.id}`} key={course.id} className="group bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-100 p-6 hover:shadow-xl hover:border-teal-200 transition-all duration-300 block">
                 <div className="flex items-start gap-4">
                   <div className="w-14 h-14 bg-gradient-to-br from-teal-500 to-blue-500 rounded-xl flex items-center justify-center flex-shrink-0">
                     <IconComponent className="w-7 h-7 text-white" />
@@ -60,14 +61,14 @@ export default function Courses() {
                         <Clock className="w-4 h-4" />
                         <span className="text-sm">{course.duration}</span>
                       </div>
-                      <button className="flex items-center gap-1 text-teal-600 hover:text-teal-700 text-sm font-medium">
+                      <span className="flex items-center gap-1 text-teal-600 hover:text-teal-700 text-sm font-medium">
                         学习课程
                         <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </button>
+                      </span>
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
