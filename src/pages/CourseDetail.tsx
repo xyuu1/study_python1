@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Check, Copy, Play, Award, Code, BookOpen } from 'lucide-react';
+import { ArrowLeft, Check, Copy, Play, Award, Code, BookOpen, RefreshCw } from 'lucide-react';
 import { courses } from '../data/courses';
 
 export default function CourseDetail() {
@@ -68,6 +68,23 @@ export default function CourseDetail() {
     return { correct, total: chapter.quiz.length };
   };
 
+  const resetChapterQuiz = () => {
+    setQuizAnswers({});
+    setQuizResults({});
+    setShowQuizResults(false);
+  };
+
+  const resetAllProgress = () => {
+    if (confirm('确定要重置所有学习进度吗？这将清空所有章节的完成状态和测验答案。')) {
+      setCompletedChapters([]);
+      setQuizAnswers({});
+      setQuizResults({});
+      setShowQuizResults(false);
+      setExpandedExercise(null);
+      localStorage.removeItem(`course_${courseId}_progress`);
+    }
+  };
+
   return (
     <div className="pt-20 min-h-screen">
       {/* 顶部导航 */}
@@ -83,6 +100,13 @@ export default function CourseDetail() {
             </div>
             <div className="flex items-center gap-4">
               <span className="text-gray-400 text-sm">{course.totalDuration}</span>
+              <button 
+                onClick={resetAllProgress} 
+                className="px-4 py-2 border border-gray-600 text-gray-400 rounded-lg hover:bg-gray-700 hover:text-white transition-all text-sm flex items-center gap-2"
+              >
+                <RefreshCw className="w-4 h-4" />
+                重置进度
+              </button>
               <button onClick={handleCompleteChapter} className="btn-cyber text-sm">
                 {completedChapters.includes(chapter.id) ? '已完成 ✓' : '标记完成'}
               </button>
@@ -175,30 +199,49 @@ export default function CourseDetail() {
             </div>
 
             {/* 代码练习 */}
-            <div className="glass rounded-xl p-6">
-              <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                <Code className="w-6 h-6 text-teal-400" />
-                代码练习
-              </h3>
-              <div className="space-y-4">
-                {chapter.exercises.map((exercise) => (
-                  <div key={exercise.id} className="border border-teal-500/20 rounded-lg overflow-hidden">
-                    <div className="p-4 bg-teal-500/10 border-b border-teal-500/20">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1">
-                          <div className="text-teal-400 text-sm font-semibold mb-2">
-                            练习 {exercise.id}
-                          </div>
-                          <p className="text-white font-medium">{exercise.question}</p>
-                        </div>
-                        <button
-                          onClick={() => setExpandedExercise(expandedExercise === exercise.id ? null : exercise.id)}
-                          className="px-4 py-2 bg-teal-500/20 text-teal-400 rounded-lg hover:bg-teal-500/30 transition-colors text-sm font-medium"
-                        >
-                          {expandedExercise === exercise.id ? '收起' : '查看答案'}
-                        </button>
+        <div className="glass rounded-xl p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xl font-bold text-white flex items-center gap-2">
+              <Code className="w-6 h-6 text-teal-400" />
+              代码练习
+            </h3>
+            <button
+              onClick={() => setExpandedExercise(null)}
+              className="px-4 py-2 border border-gray-600 text-gray-400 rounded-lg hover:bg-gray-700 hover:text-white transition-all text-sm flex items-center gap-2"
+            >
+              <RefreshCw className="w-4 h-4" />
+              收起所有答案
+            </button>
+          </div>
+          <div className="space-y-4">
+            {chapter.exercises.map((exercise) => (
+              <div key={exercise.id} className="border border-teal-500/20 rounded-lg overflow-hidden">
+                <div className="p-4 bg-teal-500/10 border-b border-teal-500/20">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1">
+                      <div className="text-teal-400 text-sm font-semibold mb-2">
+                        练习 {exercise.id}
                       </div>
+                      <p className="text-white font-medium">{exercise.question}</p>
                     </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setExpandedExercise(expandedExercise === exercise.id ? null : exercise.id)}
+                        className="px-4 py-2 bg-teal-500/20 text-teal-400 rounded-lg hover:bg-teal-500/30 transition-colors text-sm font-medium"
+                      >
+                        {expandedExercise === exercise.id ? '收起' : '查看答案'}
+                      </button>
+                      {expandedExercise === exercise.id && (
+                        <button
+                          onClick={() => setExpandedExercise(null)}
+                          className="px-4 py-2 border border-gray-600 text-gray-400 rounded-lg hover:bg-gray-700 hover:text-white transition-all text-sm"
+                        >
+                          重置
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
                     
                     {expandedExercise === exercise.id && (
                       <div className="divide-y divide-gray-700">
@@ -258,6 +301,13 @@ export default function CourseDetail() {
                   <div className="text-sm text-gray-400">
                     已答：{Object.keys(quizAnswers).length} / {chapter.quiz.length}
                   </div>
+                  <button
+                    onClick={resetChapterQuiz}
+                    className="px-4 py-2 border border-gray-600 text-gray-400 rounded-lg hover:bg-gray-700 hover:text-white transition-all text-sm flex items-center gap-2"
+                  >
+                    <RefreshCw className="w-4 h-4" />
+                    重置本章
+                  </button>
                   <button
                     onClick={() => setShowQuizResults(!showQuizResults)}
                     className="btn-cyber text-sm"

@@ -218,6 +218,176 @@ print(f"偶数个数：{len(evens)}")`,
                 solution: 'if x % 2 == 0 判断偶数'
               }
             ]
+          },
+          {
+            id: 4,
+            type: 'coding',
+            question: '猜数字游戏：编写一个函数，让用户猜1-100之间的随机数，给出"太大了"或"太小了"的提示',
+            starterCode: `import random
+
+def guess_number():
+    """猜数字游戏"""
+    target = random.randint(1, 100)
+    attempts = 0
+    
+    # 在这里编写代码，实现猜数字游戏的逻辑
+
+# 启动游戏
+guess_number()`,
+            solution: `import random
+
+def guess_number():
+    """猜数字游戏"""
+    target = random.randint(1, 100)
+    attempts = 0
+    
+    print("欢迎来到猜数字游戏！")
+    print("我已经想好了一个1到100之间的数字。")
+    
+    while True:
+        try:
+            # 获取用户输入
+            guess = int(input("请输入你的猜测: "))
+            attempts += 1
+            
+            # 判断猜测结果
+            if guess < target:
+                print("太小了！再试一次。")
+            elif guess > target:
+                print("太大了！再试一次。")
+            else:
+                print(f"恭喜你，猜对了！你用了 {attempts} 次尝试。")
+                break
+        except ValueError:
+            print("请输入有效的数字！")
+
+# 启动游戏
+guess_number()`,
+            explanation: '使用 random.randint() 生成随机数，用 while 循环让用户持续猜测，根据猜测结果给出提示。',
+            commonErrors: [
+              {
+                error: '未处理异常',
+                description: '没有处理用户输入非数字的情况',
+                solution: '使用 try-except 捕获 ValueError'
+              },
+              {
+                error: '循环无结束条件',
+                description: '忘记在猜对时 break 跳出循环',
+                solution: '在猜对时添加 break'
+              }
+            ]
+          },
+          {
+            id: 5,
+            type: 'coding',
+            question: '石头剪刀布游戏：编写一个函数，让玩家和电脑玩石头剪刀布',
+            starterCode: `import random
+
+def rock_paper_scissors():
+    """石头剪刀布游戏"""
+    choices = ['石头', '剪刀', '布']
+    
+    # 在这里编写代码，实现石头剪刀布游戏的逻辑
+
+# 启动游戏
+rock_paper_scissors()`,
+            solution: `import random
+
+def rock_paper_scissors():
+    """石头剪刀布游戏"""
+    choices = ['石头', '剪刀', '布']
+    
+    print("欢迎来到石头剪刀布游戏！")
+    print("输入 '退出' 可以结束游戏。")
+    
+    while True:
+        # 获取玩家选择
+        player_choice = input("请输入你的选择（石头/剪刀/布）：")
+        
+        # 检查是否退出
+        if player_choice == '退出':
+            print("游戏结束，再见！")
+            break
+        
+        # 验证玩家输入
+        if player_choice not in choices:
+            print("请输入有效的选择！")
+            continue
+        
+        # 电脑随机选择
+        computer_choice = random.choice(choices)
+        print(f"电脑选择：{computer_choice}")
+        
+        # 判断胜负
+        if player_choice == computer_choice:
+            print("平局！")
+        elif (player_choice == '石头' and computer_choice == '剪刀') or \
+             (player_choice == '剪刀' and computer_choice == '布') or \
+             (player_choice == '布' and computer_choice == '石头'):
+            print("你赢了！")
+        else:
+            print("你输了！")
+
+# 启动游戏
+rock_paper_scissors()`,
+            explanation: '使用 random.choice() 让电脑随机选择，通过 if-elif 判断胜负关系，支持玩家随时退出游戏。',
+            commonErrors: [
+              {
+                error: '判断逻辑错误',
+                description: '胜负判断条件有误',
+                solution: '正确列出所有玩家获胜的情况'
+              },
+              {
+                error: '缺少输入验证',
+                description: '没有验证玩家输入的有效性',
+                solution: '检查输入是否在有效选项中'
+              }
+            ]
+          },
+          {
+            id: 6,
+            type: 'coding',
+            question: '斐波那契数列：编写一个函数，生成前n个斐波那契数',
+            starterCode: `def fibonacci(n):
+    """生成前n个斐波那契数"""
+    # 在这里编写代码
+
+# 测试
+print(fibonacci(10))`,
+            solution: `def fibonacci(n):
+    """生成前n个斐波那契数"""
+    if n <= 0:
+        return []
+    elif n == 1:
+        return [0]
+    elif n == 2:
+        return [0, 1]
+    
+    # 初始化前两个数
+    fib_list = [0, 1]
+    
+    # 生成后续的数
+    for i in range(2, n):
+        next_num = fib_list[i - 1] + fib_list[i - 2]
+        fib_list.append(next_num)
+    
+    return fib_list
+
+# 测试
+print(fibonacci(10))  # 输出：[0, 1, 1, 2, 3, 5, 8, 13, 21, 34]`,
+            explanation: '斐波那契数列的每个数是前两个数的和。用列表来存储序列，用循环逐步生成后续的数。',
+            commonErrors: [
+              {
+                error: '边界情况处理',
+                description: '没有处理n为0或1的情况',
+                solution: '先判断n的大小并返回相应结果'
+              },
+              {
+                error: '索引错误',
+                description: '循环中访问列表时索引越界',
+                solution: '确保循环从正确的索引开始'
+              }
+            ]
           }
         ],
         quiz: [
@@ -481,6 +651,75 @@ print(df)`,
                 error: '键值长度不一致',
                 description: '字典中各列表长度不同',
                 solution: '确保所有键对应的列表长度一致'
+              }
+            ]
+          },
+          {
+            id: 3,
+            type: 'coding',
+            question: '简单的学生成绩管理系统：创建一个程序，允许用户添加学生成绩、查看所有成绩、计算平均分',
+            starterCode: `# 学生成绩管理系统
+scores = []
+
+def add_score(name, score):
+    # 在这里编写代码，添加学生成绩到scores列表
+    pass
+
+def show_scores():
+    # 在这里编写代码，显示所有学生成绩
+    pass
+
+def calculate_average():
+    # 在这里编写代码，计算平均分
+    pass
+
+# 测试程序
+add_score('张三', 85)
+add_score('李四', 92)
+add_score('王五', 78)
+show_scores()
+avg = calculate_average()
+print(f'平均分: {avg}')`,
+            solution: `# 学生成绩管理系统
+scores = []
+
+def add_score(name, score):
+    # 添加学生成绩到scores列表
+    scores.append({'name': name, 'score': score})
+    print(f'已添加 {name} 的成绩: {score}')
+
+def show_scores():
+    # 显示所有学生成绩
+    if not scores:
+        print('暂无学生成绩')
+        return
+    print('\\n学生成绩列表：')
+    print('-' * 30)
+    for student in scores:
+        print(f'{student[\"name\"]}: {student[\"score\"]}')
+    print('-' * 30)
+
+def calculate_average():
+    # 计算平均分
+    if not scores:
+        return 0
+    total = sum(student['score'] for student in scores)
+    avg = total / len(scores)
+    return avg
+
+# 测试程序
+add_score('张三', 85)
+add_score('李四', 92)
+add_score('王五', 78)
+show_scores()
+avg = calculate_average()
+print(f'平均分: {avg:.2f}')`,
+            explanation: '通过列表存储字典来管理学生成绩信息，实现增删查和统计功能。',
+            commonErrors: [
+              {
+                error: '空列表处理',
+                description: '未处理scores为空的情况',
+                solution: '使用 if not scores: 判断并处理'
               }
             ]
           }
@@ -774,6 +1013,75 @@ print(f"响应内容：{response.json()}")`,
                 error: '参数名错误',
                 description: '使用json而不是data发送表单数据',
                 solution: '表单数据使用data参数，JSON数据使用json参数'
+              }
+            ]
+          },
+          {
+            id: 3,
+            type: 'coding',
+            question: '简单的待办事项管理：创建一个待办事项列表，支持添加、删除、显示任务',
+            starterCode: `# 待办事项管理系统
+todos = []
+
+def add_task(task):
+    # 在这里编写代码，添加任务到todos
+    pass
+
+def remove_task(index):
+    # 在这里编写代码，删除指定索引的任务
+    pass
+
+def show_tasks():
+    # 在这里编写代码，显示所有任务
+    pass
+
+# 测试程序
+add_task('学习Python')
+add_task('完成作业')
+add_task('复习考试')
+show_tasks()
+remove_task(1)
+show_tasks()`,
+            solution: `# 待办事项管理系统
+todos = []
+
+def add_task(task):
+    # 添加任务到todos
+    todos.append(task)
+    print(f'已添加任务：{task}')
+
+def remove_task(index):
+    # 删除指定索引的任务
+    if 0 <= index < len(todos):
+        removed = todos.pop(index)
+        print(f'已删除任务：{removed}')
+    else:
+        print('无效的任务索引')
+
+def show_tasks():
+    # 显示所有任务
+    if not todos:
+        print('暂无待办任务')
+        return
+    print('\\n待办事项列表：')
+    print('-' * 30)
+    for i, task in enumerate(todos, 1):
+        print(f'{i}. {task}')
+    print('-' * 30)
+
+# 测试程序
+add_task('学习Python')
+add_task('完成作业')
+add_task('复习考试')
+show_tasks()
+remove_task(1)
+show_tasks()`,
+            explanation: '使用列表存储待办事项，通过enumerate给任务编号，注意检查索引有效性。',
+            commonErrors: [
+              {
+                error: '索引越界',
+                description: '删除时未检查索引范围',
+                solution: '添加 if 0 <= index < len(todos): 检查'
               }
             ]
           }
@@ -1102,6 +1410,80 @@ print(df_unique)`,
                 error: 'keep参数缺失',
                 description: '不指定keep参数默认保留最后一条',
                 solution: '使用 keep="first" 保留第一条'
+              }
+            ]
+          },
+          {
+            id: 3,
+            type: 'coding',
+            question: '简单的购物车管理：创建购物车，支持添加商品、计算总价、显示购物车',
+            starterCode: `# 购物车管理系统
+cart = {}
+
+def add_item(item, price, quantity=1):
+    # 在这里编写代码，添加商品到购物车
+    pass
+
+def calculate_total():
+    # 在这里编写代码，计算总价
+    pass
+
+def show_cart():
+    # 在这里编写代码，显示购物车
+    pass
+
+# 测试程序
+add_item('苹果', 5.0, 3)
+add_item('香蕉', 3.0, 5)
+add_item('牛奶', 10.0, 2)
+show_cart()
+total = calculate_total()
+print(f'总价: {total}元')`,
+            solution: `# 购物车管理系统
+cart = {}
+
+def add_item(item, price, quantity=1):
+    # 添加商品到购物车
+    if item in cart:
+        cart[item]['quantity'] += quantity
+    else:
+        cart[item] = {'price': price, 'quantity': quantity}
+    print(f'已添加 {quantity}个{item}，单价{price}元')
+
+def calculate_total():
+    # 计算总价
+    total = 0
+    for item in cart.values():
+        total += item['price'] * item['quantity']
+    return total
+
+def show_cart():
+    # 显示购物车
+    if not cart:
+        print('购物车为空')
+        return
+    print('\\n购物车内容：')
+    print('-' * 40)
+    print(f'{'商品':<10} {'单价':<8} {'数量':<8} {'小计':<10}')
+    print('-' * 40)
+    for name, info in cart.items():
+        subtotal = info['price'] * info['quantity']
+        print(f'{name:<10} {info[\"price\"]:<8.2f} {info[\"quantity\"]:<8} {subtotal:<10.2f}')
+    print('-' * 40)
+
+# 测试程序
+add_item('苹果', 5.0, 3)
+add_item('香蕉', 3.0, 5)
+add_item('牛奶', 10.0, 2)
+show_cart()
+total = calculate_total()
+print(f'总价: {total:.2f}元')`,
+            explanation: '使用字典嵌套字典来管理购物车数据，注意格式字符串的对齐输出。',
+            commonErrors: [
+              {
+                error: '重复商品处理',
+                description: '添加已有商品时没有累加数量',
+                solution: '检查 item in cart 并更新数量'
               }
             ]
           }
@@ -1727,6 +2109,60 @@ print(f"相关系数：{correlation:.4f}")`,
                 error: '直接对DataFrame使用corr',
                 description: '没有指定具体列',
                 solution: '使用 data[\'列1\'].corr(data[\'列2\'])'
+              }
+            ]
+          },
+          {
+            id: 3,
+            type: 'coding',
+            question: '猜数字游戏2.0：电脑猜，你给出提示',
+            starterCode: `import random
+
+def computer_guess_game():
+    # 在这里编写代码
+    pass
+
+# 开始游戏
+computer_guess_game()`,
+            solution: `import random
+
+def computer_guess_game():
+    print('=== 电脑猜数字 ===')
+    print('想一个1-100之间的数字，让电脑猜！')
+    print('电脑猜的时候，请输入提示：too high, too low, or correct')
+    
+    low = 1
+    high = 100
+    attempts = 0
+    
+    while True:
+        attempts += 1
+        if low != high:
+            guess = random.randint(low, high)
+        else:
+            guess = low
+        
+        print(f'电脑猜: {guess}')
+        feedback = input('请输入提示 (too high/too low/correct): ').lower()
+        
+        if feedback == 'correct':
+            print(f'🎉 电脑猜对了！用了 {attempts} 次尝试！')
+            break
+        elif feedback == 'too high':
+            high = guess - 1
+        elif feedback == 'too low':
+            low = guess + 1
+        else:
+            print('请输入有效的提示！')
+
+# 开始游戏
+computer_guess_game()`,
+            explanation: '使用二分查找的思路让电脑猜数字，根据反馈调整范围。',
+            commonErrors: [
+              {
+                error: '范围更新错误',
+                description: '当提示too high时应该调整high，不是low',
+                solution: 'too high时 high=guess-1，too low时 low=guess+1'
               }
             ]
           }
