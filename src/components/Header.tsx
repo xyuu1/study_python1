@@ -1,20 +1,16 @@
-import { BookOpen, Menu, X, User, Home, FolderKanban, GraduationCap, MessageSquare } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { BookOpen, Code, Database } from 'lucide-react';
 
-export default function Header() {
-  const location = useLocation();
-
-  const isActive = (path: string) => location.pathname === path;
-
+function Header() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
+    <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-cyan-500/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-teal-500 rounded-xl flex items-center justify-center">
-              <BookOpen className="w-5 h-5 text-white" />
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-pink-500 rounded-lg flex items-center justify-center group-hover:animate-float">
+              <Database className="w-5 h-5 text-white" />
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
+            <span className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">
               DataLearn
             </span>
           </Link>
@@ -22,53 +18,33 @@ export default function Header() {
           <nav className="hidden md:flex items-center gap-8">
             <Link 
               to="/" 
-              className={`flex items-center gap-2 transition-colors font-medium ${
-                isActive('/') ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
-              }`}
+              className="text-gray-300 hover:text-cyan-400 transition-colors font-medium"
             >
-              <Home className="w-4 h-4" />
               首页
             </Link>
-            <a 
-              href="#projects" 
-              className={`flex items-center gap-2 transition-colors font-medium ${
-                isActive('/') ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
-              }`}
+            <Link 
+              to="/course/1" 
+              className="text-gray-300 hover:text-cyan-400 transition-colors font-medium"
             >
-              <FolderKanban className="w-4 h-4" />
-              训练项目
-            </a>
+              <Code className="w-4 h-4 inline mr-1" />
+              课程学习
+            </Link>
             <a 
-              href="#courses" 
-              className={`flex items-center gap-2 transition-colors font-medium ${
-                isActive('/') ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
-              }`}
+              href="#" 
+              className="text-gray-300 hover:text-cyan-400 transition-colors font-medium"
             >
-              <GraduationCap className="w-4 h-4" />
-              课程中心
-            </a>
-            <a 
-              href="#community" 
-              className={`flex items-center gap-2 transition-colors font-medium ${
-                isActive('/') ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
-              }`}
-            >
-              <MessageSquare className="w-4 h-4" />
-              社区交流
+              <BookOpen className="w-4 h-4 inline mr-1" />
+              学习中心
             </a>
           </nav>
           
-          <div className="flex items-center gap-4">
-            <button className="hidden sm:flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-blue-600 transition-colors">
-              <User className="w-4 h-4" />
-              <span className="font-medium">登录</span>
-            </button>
-            <button className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-teal-500 text-white rounded-lg font-medium hover:opacity-90 transition-opacity">
-              免费开始
-            </button>
-          </div>
+          <button className="btn-cyber">
+            开始学习
+          </button>
         </div>
       </div>
     </header>
   );
 }
+
+export default Header;
