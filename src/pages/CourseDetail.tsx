@@ -71,11 +71,11 @@ export default function CourseDetail() {
   return (
     <div className="pt-20 min-h-screen">
       {/* 顶部导航 */}
-      <div className="glass border-b border-cyan-500/20 sticky top-16 z-40">
+      <div className="glass border-b border-blue-500/15 sticky top-16 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Link to="/" className="text-gray-400 hover:text-cyan-400 transition-colors">
+              <Link to="/" className="text-gray-400 hover:text-blue-400 transition-colors">
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <h1 className="text-xl font-bold text-white">{course.title}</h1>
@@ -93,7 +93,7 @@ export default function CourseDetail() {
           <div className="mt-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-gray-400">学习进度</span>
-              <span className="text-sm font-semibold text-cyan-400">{Math.round(progress)}%</span>
+              <span className="text-sm font-semibold text-blue-400">{Math.round(progress)}%</span>
             </div>
             <div className="progress-bar">
               <div className="progress-fill" style={{ width: `${progress}%` }}></div>
@@ -108,7 +108,7 @@ export default function CourseDetail() {
           <div className="lg:col-span-1">
             <div className="glass rounded-xl p-6 sticky top-40">
               <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-cyan-400" />
+                <BookOpen className="w-5 h-5 text-blue-400" />
                 章节列表
               </h3>
               <div className="space-y-2">
@@ -118,7 +118,7 @@ export default function CourseDetail() {
                     onClick={() => setActiveChapter(idx)}
                     className={`w-full text-left px-4 py-3 rounded-lg transition-all flex items-center gap-3 ${
                       activeChapter === idx
-                        ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50'
+                        ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50'
                         : 'text-gray-400 hover:bg-gray-800 border border-transparent'
                     }`}
                   >
@@ -141,7 +141,7 @@ export default function CourseDetail() {
             {/* 章节标题 */}
             <div className="glass rounded-xl p-6">
               <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                <Code className="w-7 h-7 text-cyan-400" />
+                <Code className="w-7 h-7 text-blue-400" />
                 第 {activeChapter + 1} 章：{chapter.title}
               </h2>
               <p className="text-gray-300 leading-relaxed">{chapter.content}</p>
@@ -150,17 +150,17 @@ export default function CourseDetail() {
             {/* 代码示例 */}
             <div className="glass rounded-xl p-6">
               <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                <Play className="w-6 h-6 text-pink-400" />
+                <Play className="w-6 h-6 text-cyan-400" />
                 代码示例
               </h3>
               <div className="space-y-4">
                 {chapter.codeExamples.map((example, idx) => (
-                  <div key={idx} className="border border-cyan-500/20 rounded-lg overflow-hidden">
-                    <div className="flex items-center justify-between px-4 py-3 bg-gray-800 border-b border-cyan-500/20">
-                      <span className="text-cyan-400 font-medium">{example.title}</span>
+                  <div key={idx} className="border border-blue-500/20 rounded-lg overflow-hidden">
+                    <div className="flex items-center justify-between px-4 py-3 bg-gray-800/50 border-b border-blue-500/20">
+                      <span className="text-blue-400 font-medium">{example.title}</span>
                       <button
                         onClick={() => handleCopyCode(example.code)}
-                        className="text-gray-400 hover:text-cyan-400 transition-colors flex items-center gap-2"
+                        className="text-gray-400 hover:text-blue-400 transition-colors flex items-center gap-2"
                       >
                         <Copy className="w-4 h-4" />
                         复制
@@ -177,23 +177,23 @@ export default function CourseDetail() {
             {/* 代码练习 */}
             <div className="glass rounded-xl p-6">
               <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                <Code className="w-6 h-6 text-purple-400" />
+                <Code className="w-6 h-6 text-teal-400" />
                 代码练习
               </h3>
               <div className="space-y-4">
                 {chapter.exercises.map((exercise) => (
-                  <div key={exercise.id} className="border border-purple-500/20 rounded-lg overflow-hidden">
-                    <div className="p-4 bg-purple-500/10 border-b border-purple-500/20">
+                  <div key={exercise.id} className="border border-teal-500/20 rounded-lg overflow-hidden">
+                    <div className="p-4 bg-teal-500/10 border-b border-teal-500/20">
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
-                          <div className="text-purple-400 text-sm font-semibold mb-2">
+                          <div className="text-teal-400 text-sm font-semibold mb-2">
                             练习 {exercise.id}
                           </div>
                           <p className="text-white font-medium">{exercise.question}</p>
                         </div>
                         <button
                           onClick={() => setExpandedExercise(expandedExercise === exercise.id ? null : exercise.id)}
-                          className="px-4 py-2 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 transition-colors text-sm font-medium"
+                          className="px-4 py-2 bg-teal-500/20 text-teal-400 rounded-lg hover:bg-teal-500/30 transition-colors text-sm font-medium"
                         >
                           {expandedExercise === exercise.id ? '收起' : '查看答案'}
                         </button>
@@ -231,7 +231,7 @@ export default function CourseDetail() {
                             </div>
                             <div className="space-y-3">
                               {exercise.commonErrors.map((error, idx) => (
-                                <div key={idx} className="bg-gray-900/50 rounded-lg p-3 border border-red-500/20">
+                                <div key={idx} className="bg-gray-800/50 rounded-lg p-3 border border-red-500/20">
                                   <div className="text-red-400 font-medium mb-1">{error.error}</div>
                                   <div className="text-gray-400 text-sm mb-2">问题：{error.description}</div>
                                   <div className="text-green-400 text-sm font-medium">解决：{error.solution}</div>
@@ -251,7 +251,7 @@ export default function CourseDetail() {
             <div className="glass rounded-xl p-6">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                  <Award className="w-6 h-6 text-yellow-400" />
+                  <Award className="w-6 h-6 text-purple-400" />
                   章节测验
                 </h3>
                 <div className="flex items-center gap-4">
@@ -268,12 +268,12 @@ export default function CourseDetail() {
               </div>
               
               {showQuizResults && (
-                <div className="mb-6 p-4 rounded-lg bg-gradient-to-r from-cyan-500/20 to-pink-500/20 border border-cyan-500/30">
+                <div className="mb-6 p-4 rounded-lg bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/30">
                   <div className="text-center">
                     <div className="text-3xl font-bold text-white mb-2">
                       {getQuizStats().correct} / {getQuizStats().total}
                     </div>
-                    <div className="text-cyan-400">
+                    <div className="text-blue-400">
                       正确率：{Math.round((getQuizStats().correct / getQuizStats().total) * 100)}%
                     </div>
                   </div>
@@ -284,11 +284,11 @@ export default function CourseDetail() {
                 {chapter.quiz.map((quiz, idx) => (
                   <div key={quiz.id} className="quiz-card">
                     <div className="flex items-start gap-3 mb-4">
-                      <span className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-cyan-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                      <span className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
                         {idx + 1}
                       </span>
                       <div className="flex-1">
-                        <span className="inline-block px-2 py-1 text-xs font-medium rounded mb-2 mr-2 bg-pink-500/20 text-pink-400 border border-pink-500/30">
+                        <span className="inline-block px-2 py-1 text-xs font-medium rounded mb-2 mr-2 bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
                           {quiz.type === 'multiple_choice' ? '选择题' : '判断题'}
                         </span>
                         <h4 className="text-white font-medium text-lg">{quiz.question}</h4>
@@ -389,7 +389,7 @@ export default function CourseDetail() {
                             )}
                           </div>
                           <div className="text-gray-300">
-                            <span className="text-cyan-400 font-medium">解析：</span>
+                            <span className="text-blue-400 font-medium">解析：</span>
                             {quiz.explanation}
                           </div>
                         </div>
