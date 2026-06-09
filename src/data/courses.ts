@@ -1,16 +1,12 @@
 // 课程数据结构定义
 export interface Exercise {
   id: number;
-  type: 'coding' | 'multiple_choice' | 'true_false';
+  type: 'coding';
   question: string;
-  starterCode?: string;
+  starterCode: string;
   solution: string;
   explanation: string;
-  commonErrors?: {
-    error: string;
-    description: string;
-    solution: string;
-  }[];
+  commonErrors?: { error: string; description: string; solution: string; }[];
 }
 
 export interface Quiz {
@@ -26,12 +22,9 @@ export interface Chapter {
   id: number;
   title: string;
   content: string;
-  codeExamples: {
-    title: string;
-    code: string;
-  }[];
+  codeExamples: { title: string; code: string; }[];
   exercises: Exercise[];
-  quiz: Quiz[];
+  quiz: { multipleChoice: Quiz[]; trueFalse: Quiz[]; };
 }
 
 export interface Course {
@@ -43,7 +36,6 @@ export interface Course {
   chapters: Chapter[];
 }
 
-// 课程数据
 export const courses: Course[] = [
   {
     id: 1,
@@ -52,2277 +44,955 @@ export const courses: Course[] = [
     totalDuration: '24小时',
     difficulty: '基础',
     chapters: [
-      // 第1章：Python基础
-      {
-        id: 1,
-        title: 'Python基础',
-        content: '本章学习Python编程语言的基础知识，包括变量、数据类型、控制流和函数等核心概念，为后续数据分析学习打下坚实基础。',
-        codeExamples: [
-          {
-            title: '变量与数据类型',
-            code: `# 变量赋值
-name = "张三"
+    {
+      id: 1,
+      title: "Python基础",
+      content: "本章学习Python编程语言的基础知识，包括变量、数据类型、控制流和函数等核心概念，为后续数据分析学习打下坚实基础。",
+      codeExamples: [
+        { title: "变量与数据类型", code: `name = "张三"
 age = 20
 height = 1.75
 is_student = True
-
 print(f"姓名：{name}")
 print(f"年龄：{age}")
 print(f"身高：{height}")
-print(f"是否学生：{is_student}")
-
-# 查看数据类型
-print(type(name))
-print(type(age))
-print(type(height))
-print(type(is_student))`
-          },
-          {
-            title: '列表与字典操作',
-            code: `# 列表操作
-numbers = [1, 2, 3, 4, 5]
+print(type(name), type(age), type(height))` },
+        { title: "列表与字典操作", code: `numbers = [1, 2, 3, 4, 5]
 numbers.append(6)
-print(f"列表长度：{len(numbers)}")
-print(f"最大值：{max(numbers)}")
-print(f"最小值：{min(numbers)}")
-print(f"求和：{sum(numbers)}")
-
-# 字典操作
-student = {
-    "name": "张三",
-    "age": 20,
-    "score": 85.5
-}
+print(f"长度：{len(numbers)}, 求和：{sum(numbers)}")
+student = {"name": "张三", "age": 20, "score": 85.5}
 print(f"学生姓名：{student['name']}")
 student['grade'] = 'A'
-print(f"添加年级后：{student}")`
-          },
-          {
-            title: '函数定义与调用',
-            code: `# 定义函数
-def greet(name):
+print(f"添加年级后：{student}")` },
+        { title: "函数定义与调用", code: `def greet(name):
     """问候函数"""
     return f"你好，{name}！"
-
 def calculate_stats(numbers):
     """计算统计信息"""
-    return {
-        'sum': sum(numbers),
-        'avg': sum(numbers) / len(numbers),
-        'max': max(numbers),
-        'min': min(numbers)
-    }
-
-# 调用函数
+    return {"sum": sum(numbers), "avg": sum(numbers)/len(numbers)}
 print(greet("数据分析"))
 nums = [10, 20, 30, 40, 50]
-stats = calculate_stats(nums)
-print(f"统计数据：{stats}")`
-          }
-        ],
-        exercises: [
-          {
-            id: 1,
-            type: 'coding',
-            question: '创建一个函数，接收一个列表，计算并返回列表中的最大值和最小值',
-            starterCode: `def find_min_max(numbers):
-    # 在这里编写代码
-
-# 测试
-result = find_min_max([85, 92, 78, 95, 88])
-print(f"最大值: {result[0]}, 最小值: {result[1]}")`,
-            solution: `def find_min_max(numbers):
-    """计算列表的最大值和最小值"""
-    if not numbers:
-        return None, None
-    return max(numbers), min(numbers)
-
-# 测试
-result = find_min_max([85, 92, 78, 95, 88])
-print(f"最大值: {result[0]}, 最小值: {result[1]}")`,
-            explanation: '使用 Python 内置的 max() 和 min() 函数可以快速找到列表中的最大值和最小值。注意处理空列表的情况。',
-            commonErrors: [
-              {
-                error: '空列表处理',
-                description: '没有处理空列表的情况',
-                solution: '添加空列表检查 if not numbers: return None, None'
-              },
-              {
-                error: '返回格式错误',
-                description: '返回值格式不正确',
-                solution: '使用元组返回多个值 return max_value, min_value'
-              }
-            ]
-          },
-          {
-            id: 2,
-            type: 'coding',
-            question: '编写一个函数，统计字符串中每个字符出现的次数',
-            starterCode: `def count_chars(text):
-    # 在这里编写代码
-
-# 测试
-result = count_chars("数据分析技术")
-print(result)`,
-            solution: `def count_chars(text):
-    """统计字符串中每个字符出现的次数"""
-    char_count = {}
-    for char in text:
-        if char in char_count:
-            char_count[char] += 1
-        else:
-            char_count[char] = 1
-    return char_count
-
-# 测试
-result = count_chars("数据分析技术")
-print(result)`,
-            explanation: '使用字典来统计每个字符出现的次数。遍历字符串中的每个字符，在字典中记录或增加计数。',
-            commonErrors: [
-              {
-                error: '未初始化字典',
-                description: '直接使用字典而不初始化',
-                solution: '使用 char_count = {} 初始化空字典'
-              },
-              {
-                error: '字符统计遗漏',
-                description: '只统计了部分字符',
-                solution: '确保遍历整个字符串 for char in text'
-              }
-            ]
-          },
-          {
-            id: 3,
-            type: 'coding',
-            question: '使用列表推导式生成1到100之间的偶数列表',
-            starterCode: `# 使用列表推导式生成偶数列表
-evens = # 在这里编写代码
-
-print(f"偶数列表：{evens}")
-print(f"偶数个数：{len(evens)}")`,
-            solution: `# 使用列表推导式生成偶数列表
-evens = [x for x in range(1, 101) if x % 2 == 0]
-
-print(f"偶数列表：{evens}")
-print(f"偶数个数：{len(evens)}")`,
-            explanation: '列表推导式 [表达式 for item in iterable if 条件]，结合 range 和取模运算可以筛选偶数。',
-            commonErrors: [
-              {
-                error: 'range范围错误',
-                description: 'range范围不正确导致遗漏数据',
-                solution: '使用 range(1, 101) 包含1到100'
-              },
-              {
-                error: '条件判断错误',
-                description: 'if条件写错导致结果不对',
-                solution: 'if x % 2 == 0 判断偶数'
-              }
-            ]
-          },
-          {
-            id: 4,
-            type: 'coding',
-            question: '猜数字游戏：编写一个函数，让用户猜1-100之间的随机数，给出"太大了"或"太小了"的提示',
-            starterCode: `import random
-
+print(f"统计数据：{calculate_stats(nums)}")` },
+      ],
+      exercises: [
+        {
+          id: 1,
+          type: "coding",
+          question: "猜数字游戏：编写一个函数，让用户猜1-100之间的随机数，给出\"太大了\"或\"太小了\"的提示",
+          starterCode: `import random
 def guess_number():
-    """猜数字游戏"""
     target = random.randint(1, 100)
     attempts = 0
-    
-    # 在这里编写代码，实现猜数字游戏的逻辑
-
-# 启动游戏
+    # 在这里编写代码
 guess_number()`,
-            solution: `import random
-
+          solution: `import random
 def guess_number():
-    """猜数字游戏"""
     target = random.randint(1, 100)
     attempts = 0
-    
     print("欢迎来到猜数字游戏！")
-    print("我已经想好了一个1到100之间的数字。")
-    
     while True:
         try:
-            # 获取用户输入
             guess = int(input("请输入你的猜测: "))
             attempts += 1
-            
-            # 判断猜测结果
-            if guess < target:
-                print("太小了！再试一次。")
-            elif guess > target:
-                print("太大了！再试一次。")
+            if guess < target: print("太小了！再试一次。")
+            elif guess > target: print("太大了！再试一次。")
             else:
-                print(f"恭喜你，猜对了！你用了 {attempts} 次尝试。")
+                print(f"恭喜你，猜对了！用了{attempts}次。")
                 break
-        except ValueError:
-            print("请输入有效的数字！")
-
-# 启动游戏
+        except ValueError: print("请输入有效的数字！")
 guess_number()`,
-            explanation: '使用 random.randint() 生成随机数，用 while 循环让用户持续猜测，根据猜测结果给出提示。',
-            commonErrors: [
-              {
-                error: '未处理异常',
-                description: '没有处理用户输入非数字的情况',
-                solution: '使用 try-except 捕获 ValueError'
-              },
-              {
-                error: '循环无结束条件',
-                description: '忘记在猜对时 break 跳出循环',
-                solution: '在猜对时添加 break'
-              }
-            ]
-          },
-          {
-            id: 5,
-            type: 'coding',
-            question: '石头剪刀布游戏：编写一个函数，让玩家和电脑玩石头剪刀布',
-            starterCode: `import random
-
+          explanation: "使用 random.randint() 生成随机数，用 while 循环让用户持续猜测，根据猜测结果给出提示。try-except 处理非法输入。",
+          commonErrors: [
+            { error: "未处理异常", description: "没有处理用户输入非数字的情况", solution: "使用 try-except 捕获 ValueError" },
+            { error: "循环无结束条件", description: "忘记在猜对时 break 跳出循环", solution: "在猜对时添加 break" },
+          ]
+        },
+        {
+          id: 2,
+          type: "coding",
+          question: "石头剪刀布游戏：编写一个函数，让玩家和电脑玩石头剪刀布",
+          starterCode: `import random
 def rock_paper_scissors():
-    """石头剪刀布游戏"""
     choices = ['石头', '剪刀', '布']
-    
-    # 在这里编写代码，实现石头剪刀布游戏的逻辑
-
-# 启动游戏
+    # 在这里编写代码
 rock_paper_scissors()`,
-            solution: `import random
-
+          solution: `import random
 def rock_paper_scissors():
-    """石头剪刀布游戏"""
     choices = ['石头', '剪刀', '布']
-    
-    print("欢迎来到石头剪刀布游戏！")
-    print("输入 '退出' 可以结束游戏。")
-    
+    print("欢迎来到石头剪刀布！输入退出结束游戏。")
     while True:
-        # 获取玩家选择
-        player_choice = input("请输入你的选择（石头/剪刀/布）：")
-        
-        # 检查是否退出
-        if player_choice == '退出':
-            print("游戏结束，再见！")
-            break
-        
-        # 验证玩家输入
-        if player_choice not in choices:
-            print("请输入有效的选择！")
-            continue
-        
-        # 电脑随机选择
-        computer_choice = random.choice(choices)
-        print(f"电脑选择：{computer_choice}")
-        
-        # 判断胜负
-        if player_choice == computer_choice:
-            print("平局！")
-        elif (player_choice == '石头' and computer_choice == '剪刀') or \
-             (player_choice == '剪刀' and computer_choice == '布') or \
-             (player_choice == '布' and computer_choice == '石头'):
+        player = input("你的选择（石头/剪刀/布）：")
+        if player == '退出': break
+        if player not in choices: continue
+        computer = random.choice(choices)
+        print(f"电脑选择：{computer}")
+        if player == computer: print("平局！")
+        elif (player=='石头'and computer=='剪刀')or(player=='剪刀'and computer=='布')or(player=='布'and computer=='石头'):
             print("你赢了！")
-        else:
-            print("你输了！")
-
-# 启动游戏
+        else: print("你输了！")
 rock_paper_scissors()`,
-            explanation: '使用 random.choice() 让电脑随机选择，通过 if-elif 判断胜负关系，支持玩家随时退出游戏。',
-            commonErrors: [
-              {
-                error: '判断逻辑错误',
-                description: '胜负判断条件有误',
-                solution: '正确列出所有玩家获胜的情况'
-              },
-              {
-                error: '缺少输入验证',
-                description: '没有验证玩家输入的有效性',
-                solution: '检查输入是否在有效选项中'
-              }
-            ]
-          },
-          {
-            id: 6,
-            type: 'coding',
-            question: '斐波那契数列：编写一个函数，生成前n个斐波那契数',
-            starterCode: `def fibonacci(n):
-    """生成前n个斐波那契数"""
+          explanation: "使用 random.choice() 让电脑随机选择，通过 if-elif 判断胜负关系。",
+          commonErrors: [
+            { error: "判断逻辑错误", description: "胜负判断条件有误", solution: "正确列出所有玩家获胜的情况" },
+          ]
+        },
+        {
+          id: 3,
+          type: "coding",
+          question: "斐波那契数列：编写一个函数，生成前n个斐波那契数",
+          starterCode: `def fibonacci(n):
     # 在这里编写代码
-
-# 测试
 print(fibonacci(10))`,
-            solution: `def fibonacci(n):
-    """生成前n个斐波那契数"""
-    if n <= 0:
-        return []
-    elif n == 1:
-        return [0]
-    elif n == 2:
-        return [0, 1]
-    
-    # 初始化前两个数
-    fib_list = [0, 1]
-    
-    # 生成后续的数
+          solution: `def fibonacci(n):
+    if n <= 0: return []
+    elif n == 1: return [0]
+    elif n == 2: return [0, 1]
+    fib = [0, 1]
     for i in range(2, n):
-        next_num = fib_list[i - 1] + fib_list[i - 2]
-        fib_list.append(next_num)
-    
-    return fib_list
-
-# 测试
-print(fibonacci(10))  # 输出：[0, 1, 1, 2, 3, 5, 8, 13, 21, 34]`,
-            explanation: '斐波那契数列的每个数是前两个数的和。用列表来存储序列，用循环逐步生成后续的数。',
-            commonErrors: [
-              {
-                error: '边界情况处理',
-                description: '没有处理n为0或1的情况',
-                solution: '先判断n的大小并返回相应结果'
-              },
-              {
-                error: '索引错误',
-                description: '循环中访问列表时索引越界',
-                solution: '确保循环从正确的索引开始'
-              }
-            ]
-          }
+        fib.append(fib[i-1] + fib[i-2])
+    return fib
+print(fibonacci(10))`,
+          explanation: "斐波那契数列的每个数是前两个数的和，用列表存储序列，循环逐步生成后续的数。",
+          commonErrors: [
+            { error: "边界情况处理", description: "没有处理n为0或1的情况", solution: "先判断n的大小并返回相应结果" },
+          ]
+        },
+      ],
+      quiz: {
+        multipleChoice: [
+          { id: 1, type: "multiple_choice", question: "Python中，以下哪个是正确的变量命名？", options: ["2name", "my-name", "my_name", "myName"], correctAnswer: "my_name", explanation: "Python变量名必须以字母或下划线开头，不能以数字开头。my_name是推荐的命名方式。" },
+          { id: 2, type: "multiple_choice", question: "type()函数的作用是什么？", options: ["修改变量类型", "返回变量的类型", "创建新变量", "删除变量"], correctAnswer: "返回变量的类型", explanation: "type()函数返回变量或值的数据类型。" },
+          { id: 3, type: "multiple_choice", question: "以下哪个是浮点数的例子？", options: ["42", "\"3.14\"", "3.14", "True"], correctAnswer: "3.14", explanation: "浮点数（float）是包含小数点的数值类型。" },
+          { id: 4, type: "multiple_choice", question: "Python中整数除法使用哪个运算符？", options: ["/", "//", "%", "*"], correctAnswer: "//", explanation: "//是整数除法运算符，返回整数结果。/是普通除法，返回浮点数。" },
+          { id: 5, type: "multiple_choice", question: "字符串可以使用什么符号定义？", options: ["只有双引号", "只有单引号", "单引号或双引号", "只有中括号"], correctAnswer: "单引号或双引号", explanation: "Python中字符串可以用单引号或双引号定义。" },
+          { id: 6, type: "multiple_choice", question: "len()函数不能用于以下哪个类型？", options: ["字符串", "列表", "字典", "整数"], correctAnswer: "整数", explanation: "len()函数用于获取序列的长度，整数不是序列类型。" },
+          { id: 7, type: "multiple_choice", question: "input()函数的返回值类型是什么？", options: ["整数", "浮点数", "字符串", "布尔值"], correctAnswer: "字符串", explanation: "input()函数总是返回字符串类型。需要数值时要用int()或float()转换。" },
+          { id: 8, type: "multiple_choice", question: "Python中的布尔值True和False分别等价于？", options: ["1和0", "\"1\"和\"0\"", "10和0", "其他"], correctAnswer: "1和0", explanation: "在Python中，True等价于1，False等价于0。" },
+          { id: 9, type: "multiple_choice", question: "str(123)的作用是什么？", options: ["转成整数", "转成浮点数", "转成字符串", "转成布尔值"], correctAnswer: "转成字符串", explanation: "str()函数将其他类型转换为字符串。" },
+          { id: 10, type: "multiple_choice", question: "以下哪个是正确的注释符号？", options: ["//", "/* */", "#", "--"], correctAnswer: "#", explanation: "Python中使用#符号创建单行注释。" },
         ],
-        quiz: [
-          {
-            id: 1,
-            type: 'multiple_choice',
-            question: 'Python中，以下哪个是正确的变量命名？',
-            options: ['2name', 'my-name', 'my_name', 'class'],
-            correctAnswer: 'my_name',
-            explanation: 'Python变量名必须以字母或下划线开头，不能以数字开头。不能使用连字符（-），不能使用保留关键字。'
-          },
-          {
-            id: 2,
-            type: 'multiple_choice',
-            question: 'type()函数的作用是什么？',
-            options: ['修改变量类型', '返回变量的类型', '创建新变量', '删除变量'],
-            correctAnswer: '返回变量的类型',
-            explanation: 'type()函数返回变量或值的数据类型。例如：type(123) 返回 <class \'int\'>。'
-          },
-          {
-            id: 3,
-            type: 'multiple_choice',
-            question: '以下哪个是浮点数的例子？',
-            options: ['42', '"3.14"', '3.14', 'True'],
-            correctAnswer: '3.14',
-            explanation: '浮点数（float）是包含小数点的数值类型。"3.14"是字符串，42是整数，True是布尔值。'
-          },
-          {
-            id: 4,
-            type: 'multiple_choice',
-            question: 'Python中整数除法使用哪个运算符？',
-            options: ['/', '//', '%', '*'],
-            correctAnswer: '//',
-            explanation: '// 是整数除法运算符，返回整数结果。/ 是普通除法，返回浮点数。'
-          },
-          {
-            id: 5,
-            type: 'multiple_choice',
-            question: '字符串可以使用什么符号定义？',
-            options: ['只有双引号', '只有单引号', '单引号或双引号', '只有中括号'],
-            correctAnswer: '单引号或双引号',
-            explanation: 'Python中字符串可以用单引号（\' \'）或双引号（" "）定义，两者效果相同。'
-          },
-          {
-            id: 6,
-            type: 'multiple_choice',
-            question: 'len()函数不能用于以下哪个类型？',
-            options: ['字符串', '列表', '字典', '整数'],
-            correctAnswer: '整数',
-            explanation: 'len()函数用于获取序列（字符串、列表、元组等）的长度，整数不是序列类型。'
-          },
-          {
-            id: 7,
-            type: 'multiple_choice',
-            question: 'input()函数的返回值类型是什么？',
-            options: ['整数', '浮点数', '字符串', '布尔值'],
-            correctAnswer: '字符串',
-            explanation: 'input()函数总是返回字符串类型。如果需要数值，需要用int()或float()转换。'
-          },
-          {
-            id: 8,
-            type: 'multiple_choice',
-            question: 'Python中的布尔值True和False分别等价于？',
-            options: ['1和0', '"1"和"0"', '10和0', '其他'],
-            correctAnswer: '1和0',
-            explanation: '在Python中，True等价于1，False等价于0。可以在数值运算中使用。'
-          },
-          {
-            id: 9,
-            type: 'multiple_choice',
-            question: 'str(123)的作用是什么？',
-            options: ['转成整数', '转成浮点数', '转成字符串', '转成布尔值'],
-            correctAnswer: '转成字符串',
-            explanation: 'str()函数将其他类型转换为字符串。例如：str(123) 返回 "123"。'
-          },
-          {
-            id: 10,
-            type: 'multiple_choice',
-            question: '以下哪个是正确的注释符号？',
-            options: ['//', '/* */', '#', '--'],
-            correctAnswer: '#',
-            explanation: 'Python中使用 # 符号创建单行注释，# 后面的内容会被解释器忽略。'
-          },
-          {
-            id: 11,
-            type: 'true_false',
-            question: 'Python是强类型语言，变量类型一旦确定就不能改变。',
-            correctAnswer: false,
-            explanation: 'Python是强类型语言，但变量可以重新赋值为不同类型的值。变量本身没有类型，类型属于值。'
-          },
-          {
-            id: 12,
-            type: 'true_false',
-            question: '在Python中，可以同时给多个变量赋相同的值，如 a = b = 10。',
-            correctAnswer: true,
-            explanation: 'Python支持链式赋值，可以同时给多个变量赋相同的值。'
-          },
-          {
-            id: 13,
-            type: 'true_false',
-            question: '字符串是不可变的，不能修改字符串中的单个字符。',
-            correctAnswer: true,
-            explanation: 'Python中的字符串是不可变对象，不能通过索引修改。但可以重新赋值整个字符串。'
-          },
-          {
-            id: 14,
-            type: 'true_false',
-            question: '浮点数运算的结果总是精确的。',
-            correctAnswer: false,
-            explanation: '浮点数运算可能存在精度问题，如 0.1 + 0.2 = 0.30000000000000004。对于精确计算应使用Decimal模块。'
-          },
-          {
-            id: 15,
-            type: 'true_false',
-            question: 'Python中可以使用下划线分隔数字提高可读性，如 1_000_000。',
-            correctAnswer: true,
-            explanation: 'Python 3.6+支持使用下划线分隔数字，这在表示大数值时非常有用。'
-          },
-          {
-            id: 16,
-            type: 'true_false',
-            question: 'None表示空值，可以用作数字0。',
-            correctAnswer: false,
-            explanation: 'None是Python的特殊空值，但不是数字0。在布尔上下文中，None被视为False。'
-          },
-          {
-            id: 17,
-            type: 'true_false',
-            question: 'Python变量名区分大小写，Name和name是不同的变量。',
-            correctAnswer: true,
-            explanation: 'Python是区分大小写的语言，所以Name、name、NAME是三个不同的变量名。'
-          },
-          {
-            id: 18,
-            type: 'true_false',
-            question: '布尔运算符and表示"与"，or表示"或"。',
-            correctAnswer: true,
-            explanation: 'and表示逻辑与（两者都为True才为True），or表示逻辑或（至少一个为True就为True）。'
-          },
-          {
-            id: 19,
-            type: 'true_false',
-            question: '在Python中，变量名可以以字母开头或下划线开头。',
-            correctAnswer: true,
-            explanation: 'Python变量名必须以字母或下划线开头，可以包含字母、数字和下划线。'
-          },
-          {
-            id: 20,
-            type: 'true_false',
-            question: '使用type()函数可以查看变量的数据类型。',
-            correctAnswer: true,
-            explanation: 'type()函数返回变量的数据类型，是Python中常用的调试和检查工具。'
-          }
-        ]
-      },
-      // 第2章：数据来源与类型
-      {
-        id: 2,
-        title: '数据来源与类型',
-        content: '本章学习常见数据源的获取方式，以及CSV、JSON、Excel等数据格式的特点和使用方法。',
-        codeExamples: [
-          {
-            title: '读取CSV文件',
-            code: `import pandas as pd
-
-# 读取CSV文件
-df = pd.read_csv('data.csv')
-print("CSV文件内容：")
-print(df.head())
-print(f"\\n数据形状: {df.shape}")
-print(f"\\n数据类型:\\n{df.dtypes}")`
-          },
-          {
-            title: '读取Excel文件',
-            code: `import pandas as pd
-
-# 读取Excel文件（支持xlsx格式）
-df = pd.read_excel('data.xlsx', sheet_name='Sheet1')
-print("Excel文件内容：")
-print(df.head())
-print(f"\\n工作表名称: {df.columns.tolist()}")`
-          },
-          {
-            title: '读取JSON数据',
-            code: `import pandas as pd
-
-# 读取JSON文件
-df = pd.read_json('data.json')
-print("JSON文件内容：")
-print(df.head())
-
-# JSON字符串解析
-json_str = '{"name": ["张三", "李四"], "score": [85, 92]}'
-df2 = pd.read_json(json_str)
-print("\\nJSON字符串解析：")
-print(df2)`
-          }
-        ],
-        exercises: [
-          {
-            id: 1,
-            type: 'coding',
-            question: '编写代码读取CSV文件并显示前5行数据',
-            starterCode: `import pandas as pd
-
-# 读取CSV文件
-# 在这里编写代码
-
-print(df.head())`,
-            solution: `import pandas as pd
-
-# 读取CSV文件
-df = pd.read_csv('sales_data.csv')
-
-print(df.head())`,
-            explanation: '使用 pandas 的 read_csv() 函数读取CSV文件，head() 方法默认显示前5行数据。',
-            commonErrors: [
-              {
-                error: '文件路径错误',
-                description: 'CSV文件路径不正确',
-                solution: '确保文件路径正确，或使用绝对路径'
-              },
-              {
-                error: '编码问题',
-                description: '文件编码导致读取失败',
-                solution: '添加 encoding 参数，如 read_csv(file, encoding="utf-8")'
-              }
-            ]
-          },
-          {
-            id: 2,
-            type: 'coding',
-            question: '将一个Python字典转换为DataFrame',
-            starterCode: `import pandas as pd
-
-data = {
-    '姓名': ['张三', '李四', '王五'],
-    '年龄': [20, 22, 21],
-    '分数': [85.5, 92.0, 78.5]
-}
-
-# 将字典转换为DataFrame
-# 在这里编写代码
-
-print(df)`,
-            solution: `import pandas as pd
-
-data = {
-    '姓名': ['张三', '李四', '王五'],
-    '年龄': [20, 22, 21],
-    '分数': [85.5, 92.0, 78.5]
-}
-
-# 将字典转换为DataFrame
-df = pd.DataFrame(data)
-
-print(df)`,
-            explanation: '使用 pd.DataFrame() 函数可以直接将Python字典转换为DataFrame，字典的键会成为列名。',
-            commonErrors: [
-              {
-                error: '键值长度不一致',
-                description: '字典中各列表长度不同',
-                solution: '确保所有键对应的列表长度一致'
-              }
-            ]
-          },
-          {
-            id: 3,
-            type: 'coding',
-            question: '简单的学生成绩管理系统：创建一个程序，允许用户添加学生成绩、查看所有成绩、计算平均分',
-            starterCode: `# 学生成绩管理系统
-scores = []
-
-def add_score(name, score):
-    # 在这里编写代码，添加学生成绩到scores列表
-    pass
-
-def show_scores():
-    # 在这里编写代码，显示所有学生成绩
-    pass
-
-def calculate_average():
-    # 在这里编写代码，计算平均分
-    pass
-
-# 测试程序
-add_score('张三', 85)
-add_score('李四', 92)
-add_score('王五', 78)
-show_scores()
-avg = calculate_average()
-print(f'平均分: {avg}')`,
-            solution: `# 学生成绩管理系统
-scores = []
-
-def add_score(name, score):
-    # 添加学生成绩到scores列表
-    scores.append({'name': name, 'score': score})
-    print(f'已添加 {name} 的成绩: {score}')
-
-def show_scores():
-    # 显示所有学生成绩
-    if not scores:
-        print('暂无学生成绩')
-        return
-    print('\\n学生成绩列表：')
-    print('-' * 30)
-    for student in scores:
-        print(f'{student[\"name\"]}: {student[\"score\"]}')
-    print('-' * 30)
-
-def calculate_average():
-    # 计算平均分
-    if not scores:
-        return 0
-    total = sum(student['score'] for student in scores)
-    avg = total / len(scores)
-    return avg
-
-# 测试程序
-add_score('张三', 85)
-add_score('李四', 92)
-add_score('王五', 78)
-show_scores()
-avg = calculate_average()
-print(f'平均分: {avg:.2f}')`,
-            explanation: '通过列表存储字典来管理学生成绩信息，实现增删查和统计功能。',
-            commonErrors: [
-              {
-                error: '空列表处理',
-                description: '未处理scores为空的情况',
-                solution: '使用 if not scores: 判断并处理'
-              }
-            ]
-          }
-        ],
-        quiz: [
-          {
-            id: 1,
-            type: 'multiple_choice',
-            question: 'Pandas中读取CSV文件的函数是？',
-            options: ['read_csv()', 'read_excel()', 'read_json()', 'read_sql()'],
-            correctAnswer: 'read_csv()',
-            explanation: 'read_csv()是Pandas用于读取CSV格式文件的函数。'
-          },
-          {
-            id: 2,
-            type: 'multiple_choice',
-            question: '以下哪种不是Pandas支持的数据类型？',
-            options: ['CSV', 'JSON', 'XML', 'Excel'],
-            correctAnswer: 'XML',
-            explanation: 'Pandas支持CSV、JSON、Excel等格式，但XML需要使用其他库如lxml来解析。'
-          },
-          {
-            id: 3,
-            type: 'multiple_choice',
-            question: 'DataFrame的shape属性返回什么？',
-            options: ['行数', '列数', '行数和列数', '数据类型'],
-            correctAnswer: '行数和列数',
-            explanation: 'shape返回一个元组(shape[0]是行数，shape[1]是列数)。'
-          },
-          {
-            id: 4,
-            type: 'multiple_choice',
-            question: '如何查看DataFrame的前几行？',
-            options: ['head()', 'tail()', 'info()', 'describe()'],
-            correctAnswer: 'head()',
-            explanation: 'head()方法显示前几行，默认5行。tail()显示后几行。'
-          },
-          {
-            id: 5,
-            type: 'multiple_choice',
-            question: 'dtypes属性返回什么信息？',
-            options: ['数据内容', '数据类型', '数据形状', '数据统计'],
-            correctAnswer: '数据类型',
-            explanation: 'dtypes返回每列的数据类型，是一个Series对象。'
-          },
-          {
-            id: 6,
-            type: 'multiple_choice',
-            question: '读取Excel文件需要哪个库的支持？',
-            options: ['numpy', 'openpyxl或xlrd', 'requests', 'beautifulsoup4'],
-            correctAnswer: 'openpyxl或xlrd',
-            explanation: '读取xlsx格式需要openpyxl，读取老格式xls需要xlrd。'
-          },
-          {
-            id: 7,
-            type: 'multiple_choice',
-            question: 'JSON数据格式使用什么分隔键值对？',
-            options: ['冒号(:)', '等号(=)', '分号(;)', '逗号(,)'],
-            correctAnswer: '冒号(:)',
-            explanation: 'JSON格式使用冒号分隔键和值，如{"name": "张三"}。'
-          },
-          {
-            id: 8,
-            type: 'multiple_choice',
-            question: '如何将DataFrame保存为CSV文件？',
-            options: ['to_csv()', 'write_csv()', 'save_csv()', 'export_csv()'],
-            correctAnswer: 'to_csv()',
-            explanation: '使用DataFrame的to_csv()方法可以将数据保存为CSV文件。'
-          },
-          {
-            id: 9,
-            type: 'multiple_choice',
-            question: 'Series和DataFrame的主要区别是？',
-            options: ['Series是一维，DataFrame是二维', 'DataFrame是一维，Series是二维', '没有区别', 'Series只能存数字'],
-            correctAnswer: 'Series是一维，DataFrame是二维',
-            explanation: 'Series是类似数组的一维结构，DataFrame是类似表格的二维结构。'
-          },
-          {
-            id: 10,
-            type: 'multiple_choice',
-            question: '读取文件时添加encoding参数是为了解决什么问题？',
-            options: ['文件大小', '文件格式', '字符编码', '文件权限'],
-            correctAnswer: '字符编码',
-            explanation: 'encoding参数用于指定文件字符编码，解决中文乱码问题。'
-          },
-          {
-            id: 11,
-            type: 'true_false',
-            question: 'CSV文件只能用逗号作为分隔符。',
-            correctAnswer: false,
-            explanation: 'CSV文件可以使用逗号、制表符或其他字符作为分隔符。'
-          },
-          {
-            id: 12,
-            type: 'true_false',
-            question: 'Pandas的DataFrame可以包含不同数据类型的列。',
-            correctAnswer: true,
-            explanation: 'DataFrame的每列可以是不同的数据类型。'
-          },
-          {
-            id: 13,
-            type: 'true_false',
-            question: 'read_json()只能读取本地JSON文件。',
-            correctAnswer: false,
-            explanation: 'read_json()可以读取本地文件，也可以读取JSON字符串。'
-          },
-          {
-            id: 14,
-            type: 'true_false',
-            question: 'DataFrame的info()方法可以查看数据的详细信息。',
-            correctAnswer: true,
-            explanation: 'info()显示数据的索引、数据类型和内存信息。'
-          },
-          {
-            id: 15,
-            type: 'true_false',
-            question: 'Excel文件可以包含多个工作表。',
-            correctAnswer: true,
-            explanation: '一个Excel文件可以包含多个工作表，read_excel()的sheet_name参数可以指定读取哪个表。'
-          },
-          {
-            id: 16,
-            type: 'true_false',
-            question: 'JSON格式支持注释。',
-            correctAnswer: false,
-            explanation: 'JSON格式不支持注释，标准JSON就是这样规定的。'
-          },
-          {
-            id: 17,
-            type: 'true_false',
-            question: 'describe()方法可以生成数据的统计摘要。',
-            correctAnswer: true,
-            explanation: 'describe()返回计数、均值、标准差、最小值、分位数和最大值。'
-          },
-          {
-            id: 18,
-            type: 'true_false',
-            question: 'Pandas只能处理结构化数据。',
-            correctAnswer: false,
-            explanation: 'Pandas主要用于结构化数据，但也可以处理半结构化的JSON等数据。'
-          },
-          {
-            id: 19,
-            type: 'true_false',
-            question: '读取大CSV文件时，可以指定usecols参数只读取部分列。',
-            correctAnswer: true,
-            explanation: 'usecols参数可以指定要读取的列，提高读取效率。'
-          },
-          {
-            id: 20,
-            type: 'true_false',
-            question: 'DataFrame的columns属性返回列名列表。',
-            correctAnswer: true,
-            explanation: 'columns属性返回所有列名的Index对象。'
-          }
-        ]
-      },
-      // 第3章：数据采集
-      {
-        id: 3,
-        title: '数据采集',
-        content: '本章学习如何使用Python进行数据采集，包括文件读取、API调用、网络爬虫基础和数据库连接。',
-        codeExamples: [
-          {
-            title: '使用requests获取网页数据',
-            code: `import requests
-
-# 发送GET请求
-url = 'https://api.example.com/data'
-response = requests.get(url)
-
-# 检查响应状态
-if response.status_code == 200:
-    data = response.json()
-    print(f"数据获取成功：{len(data)} 条记录")
-else:
-    print(f"请求失败：{response.status_code}")`
-          },
-          {
-            title: '调用RESTful API',
-            code: `import requests
-
-# POST请求示例
-url = 'https://api.example.com/login'
-payload = {
-    'username': 'admin',
-    'password': '123456'
-}
-
-response = requests.post(url, json=payload)
-
-if response.status_code == 200:
-    result = response.json()
-    token = result.get('token')
-    print(f"登录成功，获取token：{token}")
-else:
-    print(f"登录失败：{response.status_code}")`
-          },
-          {
-            title: '数据库连接查询',
-            code: `import sqlite3
-
-# 连接SQLite数据库
-conn = sqlite3.connect('sales.db')
-cursor = conn.cursor()
-
-# 执行查询
-cursor.execute('SELECT * FROM orders WHERE amount > 100')
-results = cursor.fetchall()
-
-print(f"查询到 {len(results)} 条订单")
-for row in results[:5]:
-    print(row)
-
-# 关闭连接
-conn.close()`
-          }
-        ],
-        exercises: [
-          {
-            id: 1,
-            type: 'coding',
-            question: '编写代码，使用requests库获取JSONPlaceholder API的数据',
-            starterCode: `import requests
-
-# 获取用户数据
-url = 'https://jsonplaceholder.typicode.com/users'
-
-# 在这里编写代码
-
-print(users)`,
-            solution: `import requests
-
-# 获取用户数据
-url = 'https://jsonplaceholder.typicode.com/users'
-response = requests.get(url)
-
-if response.status_code == 200:
-    users = response.json()
-    print(f"获取到 {len(users)} 个用户")
-    print(users)
-else:
-    print(f"请求失败：{response.status_code}")`,
-            explanation: '使用requests.get()发送GET请求，通过response.json()解析返回的JSON数据。',
-            commonErrors: [
-              {
-                error: '未检查状态码',
-                description: '直接使用响应内容而不检查状态码',
-                solution: '添加 if response.status_code == 200: 检查'
-              },
-              {
-                error: '异常处理缺失',
-                description: '网络请求失败时程序崩溃',
-                solution: '添加 try-except 异常处理'
-              }
-            ]
-          },
-          {
-            id: 2,
-            type: 'coding',
-            question: '模拟POST请求登录接口',
-            starterCode: `import requests
-
-# 登录接口
-url = 'https://httpbin.org/post'
-login_data = {
-    'username': 'testuser',
-    'password': 'testpass'
-}
-
-# 在这里编写代码
-
-print(f"响应状态：{response.status_code}")`,
-            solution: `import requests
-
-# 登录接口
-url = 'https://httpbin.org/post'
-login_data = {
-    'username': 'testuser',
-    'password': 'testpass'
-}
-
-# 发送POST请求
-response = requests.post(url, data=login_data)
-
-print(f"响应状态：{response.status_code}")
-print(f"响应内容：{response.json()}")`,
-            explanation: '使用requests.post()发送POST请求，data参数用于表单数据提交。',
-            commonErrors: [
-              {
-                error: '参数名错误',
-                description: '使用json而不是data发送表单数据',
-                solution: '表单数据使用data参数，JSON数据使用json参数'
-              }
-            ]
-          },
-          {
-            id: 3,
-            type: 'coding',
-            question: '简单的待办事项管理：创建一个待办事项列表，支持添加、删除、显示任务',
-            starterCode: `# 待办事项管理系统
-todos = []
-
-def add_task(task):
-    # 在这里编写代码，添加任务到todos
-    pass
-
-def remove_task(index):
-    # 在这里编写代码，删除指定索引的任务
-    pass
-
-def show_tasks():
-    # 在这里编写代码，显示所有任务
-    pass
-
-# 测试程序
-add_task('学习Python')
-add_task('完成作业')
-add_task('复习考试')
-show_tasks()
-remove_task(1)
-show_tasks()`,
-            solution: `# 待办事项管理系统
-todos = []
-
-def add_task(task):
-    # 添加任务到todos
-    todos.append(task)
-    print(f'已添加任务：{task}')
-
-def remove_task(index):
-    # 删除指定索引的任务
-    if 0 <= index < len(todos):
-        removed = todos.pop(index)
-        print(f'已删除任务：{removed}')
-    else:
-        print('无效的任务索引')
-
-def show_tasks():
-    # 显示所有任务
-    if not todos:
-        print('暂无待办任务')
-        return
-    print('\\n待办事项列表：')
-    print('-' * 30)
-    for i, task in enumerate(todos, 1):
-        print(f'{i}. {task}')
-    print('-' * 30)
-
-# 测试程序
-add_task('学习Python')
-add_task('完成作业')
-add_task('复习考试')
-show_tasks()
-remove_task(1)
-show_tasks()`,
-            explanation: '使用列表存储待办事项，通过enumerate给任务编号，注意检查索引有效性。',
-            commonErrors: [
-              {
-                error: '索引越界',
-                description: '删除时未检查索引范围',
-                solution: '添加 if 0 <= index < len(todos): 检查'
-              }
-            ]
-          }
-        ],
-        quiz: [
-          {
-            id: 1,
-            type: 'multiple_choice',
-            question: 'requests库中，哪个方法用于发送POST请求？',
-            options: ['requests.get()', 'requests.post()', 'requests.put()', 'requests.delete()'],
-            correctAnswer: 'requests.post()',
-            explanation: 'requests.post()用于发送POST请求，常见用于登录、提交表单等场景。'
-          },
-          {
-            id: 2,
-            type: 'multiple_choice',
-            question: '如何检查HTTP响应是否成功？',
-            options: ['response.ok', 'response.status_code == 200', 'response.success', 'response.code == 200'],
-            correctAnswer: 'response.status_code == 200',
-            explanation: '通过检查status_code是否等于200来判断请求是否成功。'
-          },
-          {
-            id: 3,
-            type: 'multiple_choice',
-            question: 'RESTful API中，GET方法的主要用途是？',
-            options: ['创建资源', '读取资源', '更新资源', '删除资源'],
-            correctAnswer: '读取资源',
-            explanation: 'GET方法用于从服务器获取资源，不会修改服务器数据。'
-          },
-          {
-            id: 4,
-            type: 'multiple_choice',
-            question: 'JSONPlaceholder是一个什么样的API？',
-            options: ['收费API', '免费的测试API', '企业级API', '本地API'],
-            correctAnswer: '免费的测试API',
-            explanation: 'JSONPlaceholder是免费的在线REST API，常用于测试和原型开发。'
-          },
-          {
-            id: 5,
-            type: 'multiple_choice',
-            question: 'requests.get()的headers参数用于？',
-            options: ['设置请求体', '设置请求头', '设置URL参数', '设置超时'],
-            correctAnswer: '设置请求头',
-            explanation: 'headers参数用于设置HTTP请求头，如User-Agent、Authorization等。'
-          },
-          {
-            id: 6,
-            type: 'multiple_choice',
-            question: '如何处理API返回的JSON数据？',
-            options: ['response.text', 'response.json()', 'response.content', 'response.xml()'],
-            correctAnswer: 'response.json()',
-            explanation: 'response.json()方法将JSON响应解析为Python对象。'
-          },
-          {
-            id: 7,
-            type: 'multiple_choice',
-            question: 'SQLite数据库使用什么模块操作？',
-            options: ['requests', 'sqlite3', 'json', 'pandas'],
-            correctAnswer: 'sqlite3',
-            explanation: 'Python内置sqlite3模块用于操作SQLite数据库。'
-          },
-          {
-            id: 8,
-            type: 'multiple_choice',
-            question: '网络请求中，超时参数timeout的作用是？',
-            options: ['设置重试次数', '设置等待时间', '设置缓存', '设置编码'],
-            correctAnswer: '设置等待时间',
-            explanation: 'timeout参数设置请求超时时间，防止请求无限等待。'
-          },
-          {
-            id: 9,
-            type: 'multiple_choice',
-            question: 'HTTP状态码404表示？',
-            options: ['服务器错误', '未找到资源', '权限不足', '请求成功'],
-            correctAnswer: '未找到资源',
-            explanation: '404表示请求的资源不存在或路径错误。'
-          },
-          {
-            id: 10,
-            type: 'multiple_choice',
-            question: 'cursor.fetchall()返回什么？',
-            options: ['单条记录', '所有记录列表', '记录数量', '字段名列表'],
-            correctAnswer: '所有记录列表',
-            explanation: 'fetchall()返回查询到的所有记录，以列表形式。'
-          },
-          {
-            id: 11,
-            type: 'true_false',
-            question: 'POST方法比GET方法更安全。',
-            correctAnswer: false,
-            explanation: 'POST和GET在安全性上没有本质区别，都使用明文传输。敏感数据需要使用HTTPS。'
-          },
-          {
-            id: 12,
-            type: 'true_false',
-            question: 'requests库的响应对象有status_code属性。',
-            correctAnswer: true,
-            explanation: 'status_code属性返回HTTP状态码，如200、404等。'
-          },
-          {
-            id: 13,
-            type: 'true_false',
-            question: '网络爬虫必须遵守网站的robots.txt规则。',
-            correctAnswer: true,
-            explanation: 'robots.txt文件规定了爬虫的访问规则，应该遵守。'
-          },
-          {
-            id: 14,
-            type: 'true_false',
-            question: '可以使用fetchone()获取单条记录。',
-            correctAnswer: true,
-            explanation: 'fetchone()每次返回一条记录，返回None表示没有更多记录。'
-          },
-          {
-            id: 15,
-            type: 'true_false',
-            question: 'API的URL中包含查询参数使用?分隔。',
-            correctAnswer: true,
-            explanation: 'URL中查询参数格式为：url?key=value&key2=value2。'
-          },
-          {
-            id: 16,
-            type: 'true_false',
-            question: 'conn.commit()用于提交事务。',
-            correctAnswer: true,
-            explanation: '执行增删改操作后需要commit()来保存更改。'
-          },
-          {
-            id: 17,
-            type: 'true_false',
-            question: 'response.text返回的是bytes类型。',
-            correctAnswer: false,
-            explanation: 'response.text返回str（字符串）类型，response.content返回bytes类型。'
-          },
-          {
-            id: 18,
-            type: 'true_false',
-            question: '爬虫可以抓取所有网站的数据。',
-            correctAnswer: false,
-            explanation: '有些网站禁止爬虫采集，需要遵守法律法规和网站规则。'
-          },
-          {
-            id: 19,
-            type: 'true_false',
-            question: 'conn.close()用于关闭数据库连接。',
-            correctAnswer: true,
-            explanation: '数据库操作完成后应该关闭连接释放资源。'
-          },
-          {
-            id: 20,
-            type: 'true_false',
-            question: 'API返回的数据都是JSON格式。',
-            correctAnswer: false,
-            explanation: 'API可以返回多种格式，如JSON、XML、HTML等，JSON只是其中一种。'
-          }
-        ]
-      },
-      // 第4章：数据清洗
-      {
-        id: 4,
-        title: '数据清洗',
-        content: '本章学习数据清洗的核心技术，包括缺失值处理、异常值检测、数据去重和数据类型转换。',
-        codeExamples: [
-          {
-            title: '处理缺失值',
-            code: `import pandas as pd
-import numpy as np
-
-# 创建包含缺失值的数据
-df = pd.DataFrame({
-    'A': [1, 2, np.nan, 4],
-    'B': [5, np.nan, np.nan, 8],
-    'C': [9, 10, 11, 12]
-})
-
-print("原始数据：")
-print(df)
-
-# 检测缺失值
-print("\\n缺失值统计：")
-print(df.isnull().sum())
-
-# 填充缺失值
-df_filled = df.fillna(df.mean())
-print("\\n用均值填充后：")
-print(df_filled)
-
-# 删除缺失值行
-df_dropped = df.dropna()
-print("\\n删除缺失值行后：")
-print(df_dropped)`
-          },
-          {
-            title: '数据去重',
-            code: `import pandas as pd
-
-# 创建包含重复数据
-df = pd.DataFrame({
-    'Name': ['张三', '李四', '张三', '王五', '李四'],
-    'Age': [20, 22, 20, 21, 22],
-    'Score': [85, 92, 85, 88, 92]
-})
-
-print("原始数据：")
-print(df)
-
-# 检测重复行
-print("\\n重复行检测：")
-print(df.duplicated())
-
-# 删除重复行
-df_unique = df.drop_duplicates()
-print("\\n删除重复行后：")
-print(df_unique)
-
-# 按指定列去重
-df_unique2 = df.drop_duplicates(subset=['Name', 'Age'])
-print("\\n按Name和Age列去重后：")
-print(df_unique2)`
-          },
-          {
-            title: '数据类型转换',
-            code: `import pandas as pd
-
-# 创建混合类型数据
-df = pd.DataFrame({
-    'Name': ['张三', '李四', '王五'],
-    'Age': ['20', '22', '21'],  # 字符串类型
-    'Score': [85.5, 92.0, 88.5],
-    'Date': ['2024-01-01', '2024-01-02', '2024-01-03']
-})
-
-print("原始数据类型：")
-print(df.dtypes)
-
-# 转换Age为整数
-df['Age'] = df['Age'].astype(int)
-print("\\nAge转为整数后：")
-print(df.dtypes)
-
-# 转换Date为日期类型
-df['Date'] = pd.to_datetime(df['Date'])
-print("\\nDate转为日期后：")
-print(df.dtypes)`
-          }
-        ],
-        exercises: [
-          {
-            id: 1,
-            type: 'coding',
-            question: '检测并删除DataFrame中的缺失值',
-            starterCode: `import pandas as pd
-import numpy as np
-
-df = pd.DataFrame({
-    'A': [1, 2, np.nan, 4, np.nan],
-    'B': [5, np.nan, 7, 8, 9],
-    'C': [10, 11, 12, np.nan, 14]
-})
-
-# 检测缺失值
-print("缺失值统计：")
-# 在这里编写代码
-
-# 删除包含缺失值的行
-df_clean = # 在这里编写代码
-
-print("\\n清洗后的数据：")
-print(df_clean)`,
-            solution: `import pandas as pd
-import numpy as np
-
-df = pd.DataFrame({
-    'A': [1, 2, np.nan, 4, np.nan],
-    'B': [5, np.nan, 7, 8, 9],
-    'C': [10, 11, 12, np.nan, 14]
-})
-
-# 检测缺失值
-print("缺失值统计：")
-print(df.isnull().sum())
-
-# 删除包含缺失值的行
-df_clean = df.dropna()
-
-print("\\n清洗后的数据：")
-print(df_clean)`,
-            explanation: 'isnull().sum()统计每列缺失值数量，dropna()删除包含任意缺失值的行。',
-            commonErrors: [
-              {
-                error: '使用isna()混淆',
-                description: 'isna()和isnull()功能相同但语义不同',
-                solution: '两者都可以使用，效果相同'
-              }
-            ]
-          },
-          {
-            id: 2,
-            type: 'coding',
-            question: '将某列的重复数据删除，保留第一条',
-            starterCode: `import pandas as pd
-
-df = pd.DataFrame({
-    'Name': ['苹果', '香蕉', '苹果', '橙子', '香蕉'],
-    'Price': [3.5, 2.5, 3.5, 4.0, 2.5]
-})
-
-# 删除Name列的重复项
-# 在这里编写代码
-
-print(df_unique)`,
-            solution: `import pandas as pd
-
-df = pd.DataFrame({
-    'Name': ['苹果', '香蕉', '苹果', '橙子', '香蕉'],
-    'Price': [3.5, 2.5, 3.5, 4.0, 2.5]
-})
-
-# 删除Name列的重复项
-df_unique = df.drop_duplicates(subset=['Name'], keep='first')
-
-print(df_unique)`,
-            explanation: 'drop_duplicates()的subset参数指定参考列，keep参数指定保留哪一行。',
-            commonErrors: [
-              {
-                error: 'keep参数缺失',
-                description: '不指定keep参数默认保留最后一条',
-                solution: '使用 keep="first" 保留第一条'
-              }
-            ]
-          },
-          {
-            id: 3,
-            type: 'coding',
-            question: '简单的购物车管理：创建购物车，支持添加商品、计算总价、显示购物车',
-            starterCode: `# 购物车管理系统
-cart = {}
-
-def add_item(item, price, quantity=1):
-    # 在这里编写代码，添加商品到购物车
-    pass
-
-def calculate_total():
-    # 在这里编写代码，计算总价
-    pass
-
-def show_cart():
-    # 在这里编写代码，显示购物车
-    pass
-
-# 测试程序
-add_item('苹果', 5.0, 3)
-add_item('香蕉', 3.0, 5)
-add_item('牛奶', 10.0, 2)
-show_cart()
-total = calculate_total()
-print(f'总价: {total}元')`,
-            solution: `# 购物车管理系统
-cart = {}
-
-def add_item(item, price, quantity=1):
-    # 添加商品到购物车
-    if item in cart:
-        cart[item]['quantity'] += quantity
-    else:
-        cart[item] = {'price': price, 'quantity': quantity}
-    print(f'已添加 {quantity}个{item}，单价{price}元')
-
-def calculate_total():
-    # 计算总价
-    total = 0
-    for item in cart.values():
-        total += item['price'] * item['quantity']
-    return total
-
-def show_cart():
-    # 显示购物车
-    if not cart:
-        print('购物车为空')
-        return
-    print('\\n购物车内容：')
-    print('-' * 40)
-    print(f'{'商品':<10} {'单价':<8} {'数量':<8} {'小计':<10}')
-    print('-' * 40)
-    for name, info in cart.items():
-        subtotal = info['price'] * info['quantity']
-        print(f'{name:<10} {info[\"price\"]:<8.2f} {info[\"quantity\"]:<8} {subtotal:<10.2f}')
-    print('-' * 40)
-
-# 测试程序
-add_item('苹果', 5.0, 3)
-add_item('香蕉', 3.0, 5)
-add_item('牛奶', 10.0, 2)
-show_cart()
-total = calculate_total()
-print(f'总价: {total:.2f}元')`,
-            explanation: '使用字典嵌套字典来管理购物车数据，注意格式字符串的对齐输出。',
-            commonErrors: [
-              {
-                error: '重复商品处理',
-                description: '添加已有商品时没有累加数量',
-                solution: '检查 item in cart 并更新数量'
-              }
-            ]
-          }
-        ],
-        quiz: [
-          {
-            id: 1,
-            type: 'multiple_choice',
-            question: '哪个方法可以检测缺失值？',
-            options: ['isnull()', 'isna()', 'isempty()', 'isnull()和isna()都可以'],
-            correctAnswer: 'isnull()和isna()都可以',
-            explanation: 'isnull()和isna()功能完全相同，都用于检测缺失值。'
-          },
-          {
-            id: 2,
-            type: 'multiple_choice',
-            question: 'fillna()方法的作用是？',
-            options: ['删除缺失值', '填充缺失值', '统计缺失值', '标记缺失值'],
-            correctAnswer: '填充缺失值',
-            explanation: 'fillna()用指定值填充缺失值。'
-          },
-          {
-            id: 3,
-            type: 'multiple_choice',
-            question: 'dropna()默认删除包含缺失值的？',
-            options: ['列', '行', '单元格', '整个DataFrame'],
-            correctAnswer: '行',
-            explanation: 'dropna()默认删除任何包含缺失值的行。'
-          },
-          {
-            id: 4,
-            type: 'multiple_choice',
-            question: 'duplicated()方法返回什么？',
-            options: ['重复的行', '布尔Series', '行数', '列名'],
-            correctAnswer: '布尔Series',
-            explanation: 'duplicated()返回一个布尔Series，True表示重复的行。'
-          },
-          {
-            id: 5,
-            type: 'multiple_choice',
-            question: 'astype()用于？',
-            options: ['类型转换', '类型检查', '类型统计', '类型排序'],
-            correctAnswer: '类型转换',
-            explanation: 'astype()方法用于转换数据类型。'
-          },
-          {
-            id: 6,
-            type: 'multiple_choice',
-            question: '处理异常值的第一步是？',
-            options: ['删除', '替换', '识别', '填充'],
-            correctAnswer: '识别',
-            explanation: '首先需要识别什么是异常值，通常使用统计方法如IQR或Z-score。'
-          },
-          {
-            id: 7,
-            type: 'multiple_choice',
-            question: 'IQR是指什么？',
-            options: ['最大值-最小值', 'Q3-Q1', 'Q1-最小值', '最大值-Q3'],
-            correctAnswer: 'Q3-Q1',
-            explanation: 'IQR是第三四分位数减去第一四分位数。'
-          },
-          {
-            id: 8,
-            type: 'multiple_choice',
-            question: '去重可以使用哪个方法？',
-            options: ['drop_duplicates()', 'unique()', 'duplicated()', 'remove_duplicates()'],
-            correctAnswer: 'drop_duplicates()',
-            explanation: 'drop_duplicates()用于删除重复行。'
-          },
-          {
-            id: 9,
-            type: 'multiple_choice',
-            question: 'to_datetime()的作用是？',
-            options: ['转为字符串', '转为日期', '转为数字', '转为布尔'],
-            correctAnswer: '转为日期',
-            explanation: 'to_datetime()将字符串或其他格式转为日期时间类型。'
-          },
-          {
-            id: 10,
-            type: 'multiple_choice',
-            question: 'describe()不包括以下哪个统计量？',
-            options: ['均值', '中位数', '方差', '最大值'],
-            correctAnswer: '中位数',
-            explanation: 'describe()返回计数、均值、标准差、最小值、25%、50%、75%和最大值，不包括中位数（中位数是50%分位数）。'
-          },
-          {
-            id: 11,
-            type: 'true_false',
-            question: '缺失值就是空值。',
-            correctAnswer: true,
-            explanation: '在Pandas中，NaN、None、NaT都表示缺失值。'
-          },
-          {
-            id: 12,
-            type: 'true_false',
-            question: 'fillna()可以用均值填充数值列。',
-            correctAnswer: true,
-            explanation: 'fillna(df.mean())用每列均值填充缺失值。'
-          },
-          {
-            id: 13,
-            type: 'true_false',
-            question: 'drop_duplicates()默认保留所有重复行。',
-            correctAnswer: false,
-            explanation: '默认保留第一条重复行，删除后续重复行。'
-          },
-          {
-            id: 14,
-            type: 'true_false',
-            question: '异常值必须删除。',
-            correctAnswer: false,
-            explanation: '异常值处理方式取决于业务需求，可以删除、替换或保留。'
-          },
-          {
-            id: 15,
-            type: 'true_false',
-            question: 'str类型的数字可以转为int类型。',
-            correctAnswer: true,
-            explanation: '使用astype(int)可以将"123"转为123。'
-          },
-          {
-            id: 16,
-            type: 'true_false',
-            question: 'replace()可以替换指定值。',
-            correctAnswer: true,
-            explanation: 'replace()方法可以替换DataFrame中的指定值。'
-          },
-          {
-            id: 17,
-            type: 'true_false',
-            question: 'DataFrame可以同时存在不同类型的列。',
-            correctAnswer: true,
-            explanation: '每列可以是不同的数据类型。'
-          },
-          {
-            id: 18,
-            type: 'true_false',
-            question: '删除重复行后，数据行数一定会减少。',
-            correctAnswer: false,
-            explanation: '如果没有重复行，删除后行数不变。'
-          },
-          {
-            id: 19,
-            type: 'true_false',
-            question: 'ffill()是前向填充方法。',
-            correctAnswer: true,
-            explanation: 'ffill()用前一个有效值填充缺失值。'
-          },
-          {
-            id: 20,
-            type: 'true_false',
-            question: 'unique()返回去重后的数组。',
-            correctAnswer: true,
-            explanation: 'unique()返回Series中去重后的值数组。'
-          }
-        ]
-      },
-      // 第5章：数据可视化
-      {
-        id: 5,
-        title: '数据可视化',
-        content: '本章学习使用Matplotlib和Seaborn创建专业的数据可视化图表，包括折线图、柱状图、散点图等。',
-        codeExamples: [
-          {
-            title: '创建折线图',
-            code: `import matplotlib.pyplot as plt
-import pandas as pd
-
-# 准备数据
-months = ['1月', '2月', '3月', '4月', '5月', '6月']
-sales = [120, 150, 180, 140, 200, 220]
-
-# 创建画布和图表
-plt.figure(figsize=(10, 6))
-plt.plot(months, sales, marker='o', linewidth=2, color='#00CED1')
-
-# 设置标题和标签
-plt.title('月度销售趋势', fontsize=16)
-plt.xlabel('月份', fontsize=12)
-plt.ylabel('销售额（万元）', fontsize=12)
-
-# 添加网格
-plt.grid(True, linestyle='--', alpha=0.7)
-
-# 显示图表
-plt.tight_layout()
-plt.show()`
-          },
-          {
-            title: '创建柱状图',
-            code: `import matplotlib.pyplot as plt
-import pandas as pd
-
-# 准备数据
-products = ['产品A', '产品B', '产品C', '产品D']
-sales = [4500, 3800, 5200, 4100]
-
-# 创建柱状图
-plt.figure(figsize=(10, 6))
-colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4']
-bars = plt.bar(products, sales, color=colors, edgecolor='white', linewidth=2)
-
-# 添加数值标签
-for bar in bars:
-    height = bar.get_height()
-    plt.text(bar.get_x() + bar.get_width()/2., height,
-             f'{height}',
-             ha='center', va='bottom', fontsize=12)
-
-plt.title('产品销量对比', fontsize=16)
-plt.xlabel('产品', fontsize=12)
-plt.ylabel('销量', fontsize=12)
-
-plt.tight_layout()
-plt.show()`
-          },
-          {
-            title: '创建散点图',
-            code: `import matplotlib.pyplot as plt
-import numpy as np
-
-# 生成随机数据
-np.random.seed(42)
-height = np.random.normal(170, 10, 100)  # 身高
-weight = height * 0.6 + np.random.normal(0, 5, 100)  # 体重
-
-# 创建散点图
-plt.figure(figsize=(10, 6))
-plt.scatter(height, weight, alpha=0.6, c='#FF6B6B', edgecolors='white', s=80)
-
-plt.title('身高与体重关系', fontsize=16)
-plt.xlabel('身高 (cm)', fontsize=12)
-plt.ylabel('体重 (kg)', fontsize=12)
-
-plt.tight_layout()
-plt.show()`
-          }
-        ],
-        exercises: [
-          {
-            id: 1,
-            type: 'coding',
-            question: '创建一个显示学生成绩分布的柱状图',
-            starterCode: `import matplotlib.pyplot as plt
-
-# 学生成绩数据
-students = ['张三', '李四', '王五', '赵六', '陈七']
-scores = [85, 92, 78, 96, 88]
-
-# 创建柱状图
-# 在这里编写代码
-
-plt.title('学生成绩对比')
-plt.xlabel('学生')
-plt.ylabel('成绩')
-plt.show()`,
-            solution: `import matplotlib.pyplot as plt
-
-# 学生成绩数据
-students = ['张三', '李四', '王五', '赵六', '陈七']
-scores = [85, 92, 78, 96, 88]
-
-# 创建柱状图
-plt.figure(figsize=(10, 6))
-plt.bar(students, scores, color='#4ECDC4', edgecolor='white')
-
-plt.title('学生成绩对比')
-plt.xlabel('学生')
-plt.ylabel('成绩')
-plt.ylim(0, 100)  # 设置y轴范围
-
-plt.tight_layout()
-plt.show()`,
-            explanation: '使用plt.bar()创建柱状图，figsize设置画布大小，ylim设置y轴范围。',
-            commonErrors: [
-              {
-                error: '忘记设置y轴范围',
-                description: '成绩是0-100，但y轴自动缩放',
-                solution: '使用plt.ylim(0, 100)设置合理范围'
-              }
-            ]
-          },
-          {
-            id: 2,
-            type: 'coding',
-            question: '创建一个展示公司收入增长趋势的折线图',
-            starterCode: `import matplotlib.pyplot as plt
-
-# 收入数据（万元）
-years = [2019, 2020, 2021, 2022, 2023, 2024]
-revenue = [100, 120, 150, 200, 280, 350]
-
-# 创建折线图
-# 在这里编写代码
-
-plt.show()`,
-            solution: `import matplotlib.pyplot as plt
-
-# 收入数据（万元）
-years = [2019, 2020, 2021, 2022, 2023, 2024]
-revenue = [100, 120, 150, 200, 280, 350]
-
-# 创建折线图
-plt.figure(figsize=(10, 6))
-plt.plot(years, revenue, marker='s', linewidth=2, color='#FF6B6B', markersize=10)
-
-# 添加数据标签
-for i, v in enumerate(revenue):
-    plt.text(years[i], v + 10, f'{v}万', ha='center', fontsize=10)
-
-plt.title('公司收入增长趋势', fontsize=16)
-plt.xlabel('年份', fontsize=12)
-plt.ylabel('收入（万元）', fontsize=12)
-plt.grid(True, linestyle='--', alpha=0.7)
-
-plt.tight_layout()
-plt.show()`,
-            explanation: '折线图适合展示趋势变化，使用marker参数添加数据点标记。',
-            commonErrors: [
-              {
-                error: '数据标签重叠',
-                description: '数值标签挤在一起看不清',
-                solution: '添加偏移量或调整ha参数'
-              }
-            ]
-          }
-        ],
-        quiz: [
-          {
-            id: 1,
-            type: 'multiple_choice',
-            question: 'Matplotlib中创建画布的函数是？',
-            options: ['plt.create()', 'plt.figure()', 'plt.canvas()', 'plt.new()'],
-            correctAnswer: 'plt.figure()',
-            explanation: 'figure()用于创建画布，figsize参数设置画布大小。'
-          },
-          {
-            id: 2,
-            type: 'multiple_choice',
-            question: '哪个函数用于创建折线图？',
-            options: ['plt.bar()', 'plt.scatter()', 'plt.plot()', 'plt.pie()'],
-            correctAnswer: 'plt.plot()',
-            explanation: 'plot()用于创建折线图，可以指定颜色、标记、线宽等参数。'
-          },
-          {
-            id: 3,
-            type: 'multiple_choice',
-            question: '设置图表标题使用什么方法？',
-            options: ['plt.title()', 'plt.xlabel()', 'plt.legend()', 'plt.grid()'],
-            correctAnswer: 'plt.title()',
-            explanation: 'title()设置图表标题。'
-          },
-          {
-            id: 4,
-            type: 'multiple_choice',
-            question: '柱状图使用哪个函数？',
-            options: ['plt.bar()', 'plt.hist()', 'plt.plot()', 'plt.scatter()'],
-            correctAnswer: 'plt.bar()',
-            explanation: 'bar()用于创建柱状图。'
-          },
-          {
-            id: 5,
-            type: 'multiple_choice',
-            question: '散点图使用哪个函数？',
-            options: ['plt.scatter()', 'plt.plot()', 'plt.bar()', 'plt.pie()'],
-            correctAnswer: 'plt.scatter()',
-            explanation: 'scatter()用于创建散点图。'
-          },
-          {
-            id: 6,
-            type: 'multiple_choice',
-            question: '添加图例使用什么方法？',
-            options: ['plt.legend()', 'plt.label()', 'plt.title()', 'plt.annotate()'],
-            correctAnswer: 'plt.legend()',
-            explanation: 'legend()添加图例，label参数设置标签内容。'
-          },
-          {
-            id: 7,
-            type: 'multiple_choice',
-            question: 'alpha参数控制什么？',
-            options: ['颜色', '透明度', '线宽', '标记大小'],
-            correctAnswer: '透明度',
-            explanation: 'alpha参数控制元素透明度，范围0-1。'
-          },
-          {
-            id: 8,
-            type: 'multiple_choice',
-            question: 'marker参数控制什么？',
-            options: ['线条样式', '数据点标记', '颜色', '标签'],
-            correctAnswer: '数据点标记',
-            explanation: 'marker参数设置数据点的标记样式，如"o"是圆点。'
-          },
-          {
-            id: 9,
-            type: 'multiple_choice',
-            question: 'linewidth参数控制什么？',
-            options: ['标记大小', '线条粗细', '字体大小', '画布大小'],
-            correctAnswer: '线条粗细',
-            explanation: 'linewidth设置线条的粗细程度。'
-          },
-          {
-            id: 10,
-            type: 'multiple_choice',
-            question: 'Seaborn是基于什么库的高级可视化库？',
-            options: ['numpy', 'pandas', 'matplotlib', 'scipy'],
-            correctAnswer: 'matplotlib',
-            explanation: 'Seaborn基于Matplotlib，提供了更美观的默认样式。'
-          },
-          {
-            id: 11,
-            type: 'true_false',
-            question: 'plt.show()用于显示图表。',
-            correctAnswer: true,
-            explanation: 'show()将图表渲染并显示出来。'
-          },
-          {
-            id: 12,
-            type: 'true_false',
-            question: 'grid()用于添加网格线。',
-            correctAnswer: true,
-            explanation: 'grid()添加网格，linestyle设置线型。'
-          },
-          {
-            id: 13,
-            type: 'true_false',
-            question: '一张图只能有一个子图。',
-            correctAnswer: false,
-            explanation: '可以使用subplot()或subplots()创建多个子图。'
-          },
-          {
-            id: 14,
-            type: 'true_false',
-            question: 'tight_layout()用于优化布局。',
-            correctAnswer: true,
-            explanation: 'tight_layout()自动调整子图参数防止重叠。'
-          },
-          {
-            id: 15,
-            type: 'true_false',
-            question: 'color参数可以接受颜色名称。',
-            correctAnswer: true,
-            explanation: '如"red"、"blue"或十六进制如"#FF0000"。'
-          },
-          {
-            id: 16,
-            type: 'true_false',
-            question: '箱线图用于显示数据分布。',
-            correctAnswer: true,
-            explanation: '箱线图显示数据的最小值、Q1、中位数、Q3和最大值。'
-          },
-          {
-            id: 17,
-            type: 'true_false',
-            question: '饼图适合展示比例关系。',
-            correctAnswer: true,
-            explanation: '饼图适合展示各部分占总体的比例。'
-          },
-          {
-            id: 18,
-            type: 'true_false',
-            question: 'histplot()用于绘制直方图。',
-            correctAnswer: true,
-            explanation: 'Seaborn的histplot()用于绘制直方图。'
-          },
-          {
-            id: 19,
-            type: 'true_false',
-            question: 'savefig()可以保存图表为文件。',
-            correctAnswer: true,
-            explanation: 'savefig("filename.png")保存图表为PNG格式。'
-          },
-          {
-            id: 20,
-            type: 'true_false',
-            question: 'xlabel()和ylabel()分别设置X轴和Y轴标签。',
-            correctAnswer: true,
-            explanation: 'xlabel()设置X轴标签，ylabel()设置Y轴标签。'
-          }
-        ]
-      },
-      // 第6章：统计分析基础
-      {
-        id: 6,
-        title: '统计分析基础',
-        content: '本章学习统计分析基础知识，包括描述性统计、假设检验、相关分析和回归分析基础。',
-        codeExamples: [
-          {
-            title: '描述性统计',
-            code: `import pandas as pd
-import numpy as np
-
-# 创建样本数据
-data = pd.DataFrame({
-    '数学': [85, 92, 78, 96, 88, 76, 90, 82, 95, 70],
-    '英语': [90, 88, 82, 91, 85, 79, 93, 87, 89, 75],
-    '物理': [78, 85, 80, 88, 82, 74, 86, 81, 90, 72]
-})
-
-# 描述性统计
-print("基本统计信息：")
-print(data.describe())
-
-print("\\n各科平均分：")
-print(data.mean())
-
-print("\\n各科中位数：")
-print(data.median())
-
-print("\\n各科标准差：")
-print(data.std())`
-          },
-          {
-            title: '相关性分析',
-            code: `import pandas as pd
-import numpy as np
-
-# 创建数据
-data = pd.DataFrame({
-    '学习时间': [2, 3, 4, 5, 6, 7, 8],
-    '成绩': [60, 65, 72, 80, 88, 92, 95]
-})
-
-# 计算相关系数
-correlation = data['学习时间'].corr(data['成绩'])
-print(f"学习时间与成绩的相关系数：{correlation:.4f}")
-
-# 相关性矩阵
-print("\\n相关性矩阵：")
-print(data.corr())`
-          },
-          {
-            title: '假设检验示例',
-            code: `from scipy import stats
-import numpy as np
-
-# 样本数据
-sample = [85, 92, 78, 96, 88, 76, 90, 82, 95, 70, 88, 82, 79, 91, 84]
-
-# 单样本t检验（检验均值是否等于85）
-t_statistic, p_value = stats.ttest_1samp(sample, 85)
-
-print(f"样本均值：{np.mean(sample):.2f}")
-print(f"t统计量：{t_statistic:.4f}")
-print(f"p值：{p_value:.4f}")
-
-if p_value < 0.05:
-    print("结论：拒绝原假设，均值显著不等于85")
-else:
-    print("结论：不能拒绝原假设")`
-          }
-        ],
-        exercises: [
-          {
-            id: 1,
-            type: 'coding',
-            question: '计算一组数据的均值、中位数和标准差',
-            starterCode: `import pandas as pd
-import numpy as np
-
-# 学生成绩数据
-scores = [85, 92, 78, 96, 88, 76, 90, 82, 95, 70, 88, 82]
-
-# 计算统计量
-# 在这里编写代码
-
-print(f"均值：{mean_score:.2f}")
-print(f"中位数：{median_score:.2f}")
-print(f"标准差：{std_score:.2f}")`,
-            solution: `import pandas as pd
-import numpy as np
-
-# 学生成绩数据
-scores = [85, 92, 78, 96, 88, 76, 90, 82, 95, 70, 88, 82]
-
-# 计算统计量
-mean_score = np.mean(scores)
-median_score = np.median(scores)
-std_score = np.std(scores, ddof=1)  # ddof=1为样本标准差
-
-print(f"均值：{mean_score:.2f}")
-print(f"中位数：{median_score:.2f}")
-print(f"标准差：{std_score:.2f}")`,
-            explanation: '使用numpy的mean()、median()、std()计算均值、中位数和标准差。ddof=1表示计算样本标准差。',
-            commonErrors: [
-              {
-                error: '标准差计算错误',
-                description: '未指定ddof参数',
-                solution: '数据分析中通常使用ddof=1的样本标准差'
-              }
-            ]
-          },
-          {
-            id: 2,
-            type: 'coding',
-            question: '计算两个变量之间的相关系数',
-            starterCode: `import pandas as pd
-
-# 广告投入与销售额数据
-data = pd.DataFrame({
-    '广告投入': [10, 20, 30, 40, 50],
-    '销售额': [25, 45, 60, 75, 95]
-})
-
-# 计算相关系数
-# 在这里编写代码
-
-print(f"相关系数：{correlation:.4f}")`,
-            solution: `import pandas as pd
-
-# 广告投入与销售额数据
-data = pd.DataFrame({
-    '广告投入': [10, 20, 30, 40, 50],
-    '销售额': [25, 45, 60, 75, 95]
-})
-
-# 计算相关系数
-correlation = data['广告投入'].corr(data['销售额'])
-
-print(f"相关系数：{correlation:.4f}")`,
-            explanation: '使用Series的corr()方法计算两个变量之间的皮尔逊相关系数。',
-            commonErrors: [
-              {
-                error: '直接对DataFrame使用corr',
-                description: '没有指定具体列',
-                solution: '使用 data[\'列1\'].corr(data[\'列2\'])'
-              }
-            ]
-          },
-          {
-            id: 3,
-            type: 'coding',
-            question: '猜数字游戏2.0：电脑猜，你给出提示',
-            starterCode: `import random
-
-def computer_guess_game():
-    # 在这里编写代码
-    pass
-
-# 开始游戏
-computer_guess_game()`,
-            solution: `import random
-
-def computer_guess_game():
-    print('=== 电脑猜数字 ===')
-    print('想一个1-100之间的数字，让电脑猜！')
-    print('电脑猜的时候，请输入提示：too high, too low, or correct')
-    
-    low = 1
-    high = 100
-    attempts = 0
-    
-    while True:
-        attempts += 1
-        if low != high:
-            guess = random.randint(low, high)
-        else:
-            guess = low
-        
-        print(f'电脑猜: {guess}')
-        feedback = input('请输入提示 (too high/too low/correct): ').lower()
-        
-        if feedback == 'correct':
-            print(f'🎉 电脑猜对了！用了 {attempts} 次尝试！')
-            break
-        elif feedback == 'too high':
-            high = guess - 1
-        elif feedback == 'too low':
-            low = guess + 1
-        else:
-            print('请输入有效的提示！')
-
-# 开始游戏
-computer_guess_game()`,
-            explanation: '使用二分查找的思路让电脑猜数字，根据反馈调整范围。',
-            commonErrors: [
-              {
-                error: '范围更新错误',
-                description: '当提示too high时应该调整high，不是low',
-                solution: 'too high时 high=guess-1，too low时 low=guess+1'
-              }
-            ]
-          }
-        ],
-        quiz: [
-          {
-            id: 1,
-            type: 'multiple_choice',
-            question: '描述数据集中趋势的统计量是？',
-            options: ['均值', '标准差', '方差', '极差'],
-            correctAnswer: '均值',
-            explanation: '均值、中位数、众数都是描述集中趋势的统计量。'
-          },
-          {
-            id: 2,
-            type: 'multiple_choice',
-            question: '标准差用于描述什么？',
-            options: ['集中趋势', '离散程度', '数据位置', '数据形状'],
-            correctAnswer: '离散程度',
-            explanation: '标准差越大表示数据越分散，越小表示数据越集中。'
-          },
-          {
-            id: 3,
-            type: 'multiple_choice',
-            question: '相关系数的取值范围是？',
-            options: ['-1到1', '0到1', '-1到0', '任意值'],
-            correctAnswer: '-1到1',
-            explanation: '相关系数r的范围是-1≤r≤1，r=1表示完全正相关，r=-1表示完全负相关。'
-          },
-          {
-            id: 4,
-            type: 'multiple_choice',
-            question: 'p值小于0.05表示什么？',
-            options: ['差异显著', '差异不显著', '数据错误', '无法判断'],
-            correctAnswer: '差异显著',
-            explanation: '通常p<0.05被认为统计上显著，拒绝原假设。'
-          },
-          {
-            id: 5,
-            type: 'multiple_choice',
-            question: '正态分布的特征是？',
-            options: ['均值=中位数=众数', '均值>中位数', '均值<中位数', '没有特征'],
-            correctAnswer: '均值=中位数=众数',
-            explanation: '正态分布是对称的，均值、中位数、众数三者相等。'
-          },
-          {
-            id: 6,
-            type: 'multiple_choice',
-            question: '假设检验中，原假设用哪个符号表示？',
-            options: ['H1', 'H0', 'α', 'β'],
-            correctAnswer: 'H0',
-            explanation: 'H0表示原假设，H1表示备择假设。'
-          },
-          {
-            id: 7,
-            type: 'multiple_choice',
-            question: 't检验用于比较什么？',
-            options: ['均值', '方差', '比例', '相关系数'],
-            correctAnswer: '均值',
-            explanation: 't检验用于比较样本均值与总体均值或两个样本均值的差异。'
-          },
-          {
-            id: 8,
-            type: 'multiple_choice',
-            question: '相关分析研究的是什么关系？',
-            options: ['因果关系', '线性关系', '函数关系', '随机关系'],
-            correctAnswer: '线性关系',
-            explanation: '相关分析研究变量之间的线性相关程度和方向。'
-          },
-          {
-            id: 9,
-            type: 'multiple_choice',
-            question: '置信区间通常是多少？',
-            options: ['80%', '90%', '95%', '99%'],
-            correctAnswer: '95%',
-            explanation: '95%置信区间是最常用的，表示重复抽样时95%会包含真值。'
-          },
-          {
-            id: 10,
-            type: 'multiple_choice',
-            question: '方差是标准差的？',
-            options: ['平方', '平方根', '倒数', '相反数'],
-            correctAnswer: '平方',
-            explanation: '标准差是方差的平方根。'
-          },
-          {
-            id: 11,
-            type: 'true_false',
-            question: '均值对异常值敏感。',
-            correctAnswer: true,
-            explanation: '均值容易受极端值影响，中位数对异常值更稳健。'
-          },
-          {
-            id: 12,
-            type: 'true_false',
-            question: '相关系数为0表示两个变量无关。',
-            correctAnswer: false,
-            explanation: '相关系数为0只表示无线性相关，可能存在非线性关系。'
-          },
-          {
-            id: 13,
-            type: 'true_false',
-            question: '样本量越大，样本均值越接近总体均值。',
-            correctAnswer: true,
-            explanation: '根据大数定律，样本量增大会使样本统计量更接近总体参数。'
-          },
-          {
-            id: 14,
-            type: 'true_false',
-            question: '拒绝原假设意味着原假设一定为假。',
-            correctAnswer: false,
-            explanation: '拒绝原假设只是说在当前样本下有足够证据，不代表原假设一定为假。'
-          },
-          {
-            id: 15,
-            type: 'true_false',
-            question: 'z分数表示数据距离均值的标准差倍数。',
-            correctAnswer: true,
-            explanation: 'z分数 = (x - 均值) / 标准差，表示距离均值的标准化距离。'
-          },
-          {
-            id: 16,
-            type: 'true_false',
-            question: '显著性水平α是犯第一类错误的概率。',
-            correctAnswer: true,
-            explanation: '第一类错误是原假设为真却拒绝的错误，概率为α。'
-          },
-          {
-            id: 17,
-            type: 'true_false',
-            question: '回归分析可以确定因果关系。',
-            correctAnswer: false,
-            explanation: '回归分析只能发现相关关系，因果关系需要实验设计来确认。'
-          },
-          {
-            id: 18,
-            type: 'true_false',
-            question: '中位数是排序后位于中间的数值。',
-            correctAnswer: true,
-            explanation: '对于偶数个数据，中位数是中间两个数的平均值。'
-          },
-          {
-            id: 19,
-            type: 'true_false',
-            question: '变异系数是标准差与均值的比值。',
-            correctAnswer: true,
-            explanation: '变异系数CV = 标准差/均值，用于比较不同量纲数据的离散程度。'
-          },
-          {
-            id: 20,
-            type: 'true_false',
-            question: '数据清洗不属于数据分析的步骤。',
-            correctAnswer: false,
-            explanation: '数据清洗是数据分析的重要步骤，包括处理缺失值、异常值等。'
-          }
+        trueFalse: [
+          { id: 1, type: "true_false", question: "Python中的变量创建时不需要声明类型。", correctAnswer: true, explanation: "Python是动态类型语言，变量在赋值时自动确定类型。" },
+          { id: 2, type: "true_false", question: "链式赋值 a = b = c = 0 在Python中是合法的。", correctAnswer: true, explanation: "Python支持链式赋值，可以同时给多个变量赋相同的值。" },
+          { id: 3, type: "true_false", question: "字符串在Python中是可变的，可以通过索引直接修改某个字符。", correctAnswer: false, explanation: "Python中的字符串是不可变对象（immutable）。" },
+          { id: 4, type: "true_false", question: "浮点数运算可能存在精度问题，例如 0.1 + 0.2 不一定严格等于 0.3。", correctAnswer: true, explanation: "由于浮点数在计算机中以二进制存储，存在精度损失问题。" },
+          { id: 5, type: "true_false", question: "Python中可以用下划线作为数字的分隔符，如 1_000_000 表示100万。", correctAnswer: true, explanation: "Python 3.6+支持下划线作为数字的视觉分隔符。" },
+          { id: 6, type: "true_false", question: "None 在Python中等价于数字0。", correctAnswer: false, explanation: "None是一个特殊的空值对象，不是0。" },
+          { id: 7, type: "true_false", question: "Python区分大小写，变量 Name 和 name 是两个不同的变量。", correctAnswer: true, explanation: "Python是区分大小写的语言。" },
+          { id: 8, type: "true_false", question: "在布尔运算中，and 和 or 运算符总是返回布尔值True或False。", correctAnswer: false, explanation: "Python中的and和or运算符返回的是参与运算的实际值，而非布尔值。" },
+          { id: 9, type: "true_false", question: "Python变量名可以以字母或下划线开头。", correctAnswer: true, explanation: "变量名必须以字母（a-z, A-Z）或下划线（_）开头。" },
+          { id: 10, type: "true_false", question: "type()函数可以用来查看变量的数据类型。", correctAnswer: true, explanation: "type()是Python内置函数，返回对象的类型信息。" },
         ]
       }
+    },
+    {
+      id: 2,
+      title: "数据来源与类型",
+      content: "本章学习常见数据源的获取方式，以及CSV、JSON、Excel等数据格式的特点，掌握使用Pandas读取各种格式数据的方法。",
+      codeExamples: [
+        { title: "读取CSV文件", code: `import pandas as pd
+df = pd.read_csv('students.csv')
+print("数据形状：", df.shape)
+print("前5行：")
+print(df.head())` },
+        { title: "读取Excel文件", code: `import pandas as pd
+df = pd.read_excel('sales.xlsx', sheet_name='2024')
+print("列名：", df.columns.tolist())
+print("数据概览：")
+print(df.describe())` },
+        { title: "读取JSON数据", code: `import pandas as pd
+import json
+json_str = """
+[
+  {"name": "苹果", "price": 5.5, "stock": 100},
+  {"name": "香蕉", "price": 3.0, "stock": 200}
+]
+"""
+data = json.loads(json_str)
+df = pd.DataFrame(data)
+print(df)` },
+      ],
+      exercises: [
+        {
+          id: 1,
+          type: "coding",
+          question: "简单的学生成绩管理：创建包含学生姓名、科目和成绩的DataFrame，并按科目计算平均分",
+          starterCode: `import pandas as pd
+data = {
+    '姓名': ['张三', '李四', '王五', '张三', '李四', '王五'],
+    '科目': ['数学', '数学', '数学', '语文', '语文', '语文'],
+    '成绩': [85, 92, 78, 90, 88, 82]
+}
+# 在这里编写代码`,
+          solution: `import pandas as pd
+data = {
+    '姓名': ['张三', '李四', '王五', '张三', '李四', '王五'],
+    '科目': ['数学', '数学', '数学', '语文', '语文', '语文'],
+    '成绩': [85, 92, 78, 90, 88, 82]
+}
+df = pd.DataFrame(data)
+print(df)
+print()
+print("按科目平均分：")
+print(df.groupby('科目')['成绩'].mean())`,
+          explanation: "使用Pandas创建DataFrame，通过 groupby() 进行分组聚合计算。",
+          commonErrors: [
+            { error: "分组语法错误", description: "忘记指定聚合函数如 mean()", solution: "groupby() 后需要调用聚合函数" },
+          ]
+        },
+        {
+          id: 2,
+          type: "coding",
+          question: "数据筛选：使用Pandas从销售数据中筛选出销售额大于1000且地区为\"华东\"的记录",
+          starterCode: `import pandas as pd
+sales_data = {
+    '产品': ['A', 'B', 'C', 'D', 'E'],
+    '销售额': [1500, 800, 2000, 600, 1200],
+    '地区': ['华东', '华北', '华东', '华南', '华东']
+}
+df = pd.DataFrame(sales_data)
+# 在这里编写筛选逻辑`,
+          solution: `import pandas as pd
+sales_data = {
+    '产品': ['A', 'B', 'C', 'D', 'E'],
+    '销售额': [1500, 800, 2000, 600, 1200],
+    '地区': ['华东', '华北', '华东', '华南', '华东']
+}
+df = pd.DataFrame(sales_data)
+filtered = df[(df['销售额'] > 1000) & (df['地区'] == '华东')]
+print("筛选结果：")
+print(filtered)`,
+          explanation: "Pandas支持使用布尔索引进行数据筛选。多个条件需要用 & (与)连接，每个条件必须用括号包裹。",
+          commonErrors: [
+            { error: "符号错误", description: "使用了 and 而不是 &", solution: "在Pandas筛选中使用 &" },
+            { error: "缺少括号", description: "没有给每个条件加括号", solution: "每个条件必须用括号包裹" },
+          ]
+        },
+        {
+          id: 3,
+          type: "coding",
+          question: "统计分析：编写代码计算一组数据的总数、总和、平均值、最大值和最小值",
+          starterCode: `import pandas as pd
+numbers = [23, 45, 12, 67, 89, 34, 56, 78, 91, 28]
+df = pd.DataFrame(numbers, columns=['数值'])
+# 在这里编写代码`,
+          solution: `import pandas as pd
+numbers = [23, 45, 12, 67, 89, 34, 56, 78, 91, 28]
+df = pd.DataFrame(numbers, columns=['数值'])
+print(f"总数：{len(numbers)}")
+print(f"总和：{sum(numbers)}")
+print(f"平均值：{sum(numbers)/len(numbers):.2f}")
+print(f"最大值：{max(numbers)}")
+print(f"最小值：{min(numbers)}")
+print()
+print("Pandas describe：")
+print(df.describe())`,
+          explanation: "可以使用Python内置函数进行统计计算，也可以直接使用Pandas的 describe() 方法。",
+          commonErrors: [
+            { error: "空列表处理", description: "没有处理空列表导致除零错误", solution: "判断列表长度或使用Pandas自动处理" },
+          ]
+        },
+      ],
+      quiz: {
+        multipleChoice: [
+          { id: 1, type: "multiple_choice", question: "Pandas中用于读取CSV文件的函数是？", options: ["pd.read_csv()", "pd.load_csv()", "pd.open_csv()", "pd.csv_read()"], correctAnswer: "pd.read_csv()", explanation: "pd.read_csv() 是Pandas读取CSV文件的标准函数。" },
+          { id: 2, type: "multiple_choice", question: "以下哪种文件格式Pandas不支持直接读取？", options: ["CSV", "Excel", "JSON", "PSD"], correctAnswer: "PSD", explanation: "PSD是Photoshop图像格式，Pandas不支持。" },
+          { id: 3, type: "multiple_choice", question: "DataFrame的shape属性返回什么？", options: ["元素总数", "(行数, 列数)", "列名列表", "数据类型"], correctAnswer: "(行数, 列数)", explanation: "shape属性返回一个元组(行数, 列数)。" },
+          { id: 4, type: "multiple_choice", question: "df.head() 默认返回前几行？", options: ["3行", "5行", "10行", "全部"], correctAnswer: "5行", explanation: "head()方法默认返回前5行。" },
+          { id: 5, type: "multiple_choice", question: "df.dtypes 的作用是？", options: ["返回所有数据", "返回各列数据类型", "删除数据", "修改类型"], correctAnswer: "返回各列数据类型", explanation: "dtypes属性返回DataFrame中每一列的数据类型。" },
+          { id: 6, type: "multiple_choice", question: "读取 .xlsx 文件通常需要安装哪个库？", options: ["numpy", "openpyxl", "scipy", "sklearn"], correctAnswer: "openpyxl", explanation: "pandas读取 .xlsx 文件需要openpyxl作为引擎。" },
+          { id: 7, type: "multiple_choice", question: "JSON数据中键值对之间用什么符号分隔？", options: ["分号", "逗号", "冒号", "空格"], correctAnswer: "逗号", explanation: "JSON中键值对之间用逗号分隔，键和值之间用冒号分隔。" },
+          { id: 8, type: "multiple_choice", question: "Pandas中将DataFrame保存为CSV的方法是？", options: ["df.save_csv()", "df.write_csv()", "df.to_csv()", "df.export_csv()"], correctAnswer: "df.to_csv()", explanation: "df.to_csv() 是保存为CSV文件的标准方法。" },
+          { id: 9, type: "multiple_choice", question: "Series和DataFrame的主要区别是什么？", options: ["没有区别", "Series是一维，DataFrame是二维", "Series更快", "DataFrame只能存数字"], correctAnswer: "Series是一维，DataFrame是二维", explanation: "Series是一维带标签的数据结构，DataFrame是二维表格结构。" },
+          { id: 10, type: "multiple_choice", question: "读取CSV文件遇到中文乱码时，通常可以尝试设置什么参数？", options: ["header", "index_col", "encoding", "sep"], correctAnswer: "encoding", explanation: "encoding参数指定文件编码，中文文件常使用 utf-8、gbk 等编码。" },
+        ],
+        trueFalse: [
+          { id: 1, type: "true_false", question: "CSV文件只能使用逗号作为字段分隔符。", correctAnswer: false, explanation: "CSV虽然名称是逗号分隔值，但分隔符可以是制表符、分号等。" },
+          { id: 2, type: "true_false", question: "一个DataFrame中的不同列可以是不同的数据类型。", correctAnswer: true, explanation: "DataFrame的每一列可以有独立的数据类型。" },
+          { id: 3, type: "true_false", question: "pd.read_json() 只能读取JSON文件，不能解析JSON字符串。", correctAnswer: false, explanation: "pd.read_json() 可以读取JSON文件，也可以传入JSON字符串。" },
+          { id: 4, type: "true_false", question: "df.info() 方法可以显示每列的非空值数量和内存使用情况。", correctAnswer: true, explanation: "info() 是数据探索的常用方法，显示索引、列名、非空计数、数据类型和内存使用。" },
+          { id: 5, type: "true_false", question: "Excel文件可以包含多个工作表（Sheet），Pandas可以指定读取某个工作表。", correctAnswer: true, explanation: "read_excel() 可以通过 sheet_name 参数指定要读取的工作表。" },
+          { id: 6, type: "true_false", question: "JSON格式支持在数据中添加注释（类似 // 或 /* */）。", correctAnswer: false, explanation: "标准JSON不支持注释。" },
+          { id: 7, type: "true_false", question: "df.describe() 只对数值列生成统计摘要。", correctAnswer: true, explanation: "describe() 默认只对数值类型列输出统计量。" },
+          { id: 8, type: "true_false", question: "Pandas主要用于处理结构化的表格类数据。", correctAnswer: true, explanation: "Pandas专门设计用于处理结构化表格数据。" },
+          { id: 9, type: "true_false", question: "read_csv() 的 usecols 参数可以只读取指定的列，减少内存占用。", correctAnswer: true, explanation: "usecols 参数接受列名列表或索引列表，只加载需要的列。" },
+          { id: 10, type: "true_false", question: "df.columns 属性返回DataFrame的所有行索引。", correctAnswer: false, explanation: "df.columns 返回列名，df.index 返回行索引。" },
+        ]
+      }
+    },
+    {
+      id: 3,
+      title: "数据采集",
+      content: "本章学习如何使用Python进行数据采集，包括文件读取、API调用、网络爬虫基础和数据库连接，掌握多源数据获取能力。",
+      codeExamples: [
+        { title: "使用requests获取网页数据", code: `import requests
+response = requests.get('https://api.github.com')
+print(f"状态码：{response.status_code}")
+print(response.text[:200])` },
+        { title: "调用RESTful API", code: `import requests
+url = 'https://jsonplaceholder.typicode.com/posts/1'
+response = requests.get(url)
+if response.status_code == 200:
+    data = response.json()
+    print(f"标题：{data['title']}")` },
+        { title: "数据库连接查询", code: `import sqlite3
+import pandas as pd
+conn = sqlite3.connect('example.db')
+query = "SELECT * FROM users LIMIT 10"
+df = pd.read_sql(query, conn)
+print(df.head())
+conn.close()` },
+      ],
+      exercises: [
+        {
+          id: 1,
+          type: "coding",
+          question: "待办事项管理：编写一个简单的待办事项管理程序，支持添加、查看和删除任务",
+          starterCode: `def todo_manager():
+    todos = []
+    # 在这里编写代码
+todo_manager()`,
+          solution: `def todo_manager():
+    todos = []
+    while True:
+        print("\\n=== 待办事项管理 ===")
+        print("1. 添加任务")
+        print("2. 查看任务")
+        print("3. 删除任务")
+        print("4. 退出")
+        choice = input("请选择操作：")
+        if choice == '1':
+            task = input("请输入任务内容：")
+            todos.append(task)
+            print(f"已添加：{task}")
+        elif choice == '2':
+            if not todos: print("暂无任务")
+            else:
+                for i, task in enumerate(todos, 1):
+                    print(f"{i}. {task}")
+        elif choice == '3':
+            idx = int(input("请输入要删除的任务编号：")) - 1
+            if 0 <= idx < len(todos):
+                removed = todos.pop(idx)
+                print(f"已删除：{removed}")
+        elif choice == '4':
+            print("再见！")
+            break
+todo_manager()`,
+          explanation: "通过列表存储任务，使用循环提供菜单选择，列表的 append() 和 pop() 方法实现添加和删除功能。",
+          commonErrors: [
+            { error: "索引越界", description: "删除时没有检查用户输入的编号是否有效", solution: "判断索引是否在有效范围内" },
+          ]
+        },
+        {
+          id: 2,
+          type: "coding",
+          question: "简单的用户输入处理：编写代码收集用户基本信息并以字典形式保存",
+          starterCode: `def collect_user_info():
+    # 在这里编写代码
+collect_user_info()`,
+          solution: `def collect_user_info():
+    user = {}
+    user['name'] = input("请输入姓名：")
+    while True:
+        try:
+            user['age'] = int(input("请输入年龄："))
+            break
+        except ValueError:
+            print("请输入有效数字！")
+    user['email'] = input("请输入邮箱：")
+    print("\\n用户信息：")
+    for k, v in user.items():
+        print(f"{k}: {v}")
+    return user
+collect_user_info()`,
+          explanation: "使用字典存储用户信息，通过 input() 收集数据，使用 try-except 验证年龄输入的有效性。",
+          commonErrors: [
+            { error: "输入未验证", description: "数字类型输入没有做异常处理", solution: "使用 try-except 捕获 ValueError" },
+          ]
+        },
+        {
+          id: 3,
+          type: "coding",
+          question: "数据存储与展示：编写一个保存学生成绩到JSON文件并从文件读取展示的程序",
+          starterCode: `import json
+def save_and_load_scores():
+    scores = {
+        '张三': {'数学': 85, '语文': 90},
+        '李四': {'数学': 92, '语文': 88}
+    }
+    # 在这里编写代码
+save_and_load_scores()`,
+          solution: `import json
+def save_and_load_scores():
+    scores = {
+        '张三': {'数学': 85, '语文': 90},
+        '李四': {'数学': 92, '语文': 88}
+    }
+    with open('scores.json', 'w', encoding='utf-8') as f:
+        json.dump(scores, f, ensure_ascii=False, indent=2)
+    print("已保存到 scores.json")
+    with open('scores.json', 'r', encoding='utf-8') as f:
+        loaded = json.load(f)
+    print("\\n从文件读取：")
+    for name, subjects in loaded.items():
+        print(f"{name}: {subjects}")
+save_and_load_scores()`,
+          explanation: "使用 json.dump() 将字典保存为JSON文件，json.load() 从文件读取数据。with 语句自动管理文件的打开和关闭。",
+          commonErrors: [
+            { error: "中文乱码", description: "未设置 encoding 和 ensure_ascii 参数", solution: "设置 encoding=utf-8 和 ensure_ascii=False" },
+          ]
+        },
+      ],
+      quiz: {
+        multipleChoice: [
+          { id: 1, type: "multiple_choice", question: "发送POST请求应该使用requests库的哪个方法？", options: ["requests.get()", "requests.post()", "requests.put()", "requests.send()"], correctAnswer: "requests.post()", explanation: "requests.post() 用于发送POST请求。" },
+          { id: 2, type: "multiple_choice", question: "HTTP响应状态码200表示什么？", options: ["重定向", "客户端错误", "服务器错误", "请求成功"], correctAnswer: "请求成功", explanation: "200是标准的\"成功\"状态码。" },
+          { id: 3, type: "multiple_choice", question: "GET请求通常用于什么场景？", options: ["修改数据", "删除数据", "获取/查询数据", "上传文件"], correctAnswer: "获取/查询数据", explanation: "GET是最常用的HTTP方法，用于从服务器获取数据。" },
+          { id: 4, type: "multiple_choice", question: "以下哪个是用于测试的公共JSON API？", options: ["jsonplaceholder.typicode.com", "testapi.google.com", "json.test", "api.demo"], correctAnswer: "jsonplaceholder.typicode.com", explanation: "JSONPlaceholder是一个免费的公共API，提供测试用的假数据。" },
+          { id: 5, type: "multiple_choice", question: "requests请求中设置请求头信息使用哪个参数？", options: ["params", "headers", "body", "meta"], correctAnswer: "headers", explanation: "headers 参数接收一个字典，用于设置请求头。" },
+          { id: 6, type: "multiple_choice", question: "如何从requests响应中获取解析后的JSON数据？", options: ["response.text", "response.json()", "response.data", "response.content"], correctAnswer: "response.json()", explanation: "response.json() 会自动将JSON格式的响应内容解析为Python字典或列表。" },
+          { id: 7, type: "multiple_choice", question: "Python中操作SQLite数据库使用哪个标准库？", options: ["mysql", "psycopg2", "sqlite3", "pymongo"], correctAnswer: "sqlite3", explanation: "sqlite3 是Python标准库中的模块，提供SQLite数据库操作接口。" },
+          { id: 8, type: "multiple_choice", question: "requests中设置请求超时时间使用哪个参数？", options: ["time", "timeout", "delay", "wait"], correctAnswer: "timeout", explanation: "timeout 参数设置请求的超时秒数。" },
+          { id: 9, type: "multiple_choice", question: "HTTP状态码404表示什么？", options: ["服务器内部错误", "资源未找到", "请求成功", "需要登录"], correctAnswer: "资源未找到", explanation: "404表示客户端请求的资源在服务器上不存在。" },
+          { id: 10, type: "multiple_choice", question: "执行SQL查询后，获取所有结果的方法是？", options: ["cursor.getone()", "cursor.fetchall()", "cursor.read()", "cursor.all()"], correctAnswer: "cursor.fetchall()", explanation: "cursor.fetchall() 获取所有查询结果行。" },
+        ],
+        trueFalse: [
+          { id: 1, type: "true_false", question: "POST请求发送的数据比GET请求更安全，因为数据不会出现在URL中。", correctAnswer: true, explanation: "GET请求的数据在URL中可见，POST数据放在请求体中，相对更隐蔽。" },
+          { id: 2, type: "true_false", question: "可以通过 response.status_code 检查HTTP请求的状态码。", correctAnswer: true, explanation: "status_code 属性返回响应的HTTP状态码。" },
+          { id: 3, type: "true_false", question: "robots.txt 文件规定了网站哪些内容允许被爬虫抓取。", correctAnswer: true, explanation: "robots.txt 告诉爬虫哪些页面可以或不可以访问。" },
+          { id: 4, type: "true_false", question: "cursor.fetchone() 返回查询结果中的所有行。", correctAnswer: false, explanation: "fetchone() 只返回下一行数据，fetchall() 才返回所有行。" },
+          { id: 5, type: "true_false", question: "URL查询参数（?key=value形式）通常用于GET请求。", correctAnswer: true, explanation: "查询参数是GET请求传递数据的标准方式。" },
+          { id: 6, type: "true_false", question: "数据库操作中，conn.commit() 用于回滚事务。", correctAnswer: false, explanation: "commit() 提交事务使更改永久生效，rollback() 才是回滚。" },
+          { id: 7, type: "true_false", question: "response.text 返回字符串形式的响应内容。", correctAnswer: true, explanation: "response.text 返回解码后的文本字符串。" },
+          { id: 8, type: "true_false", question: "爬虫可以无限制地抓取任何网站的内容。", correctAnswer: false, explanation: "爬取数据需要遵守网站的robots.txt和服务条款，过度抓取可能导致IP被封或法律风险。" },
+          { id: 9, type: "true_false", question: "操作数据库后应该调用 conn.close() 关闭连接。", correctAnswer: true, explanation: "及时关闭数据库连接是良好的实践。" },
+          { id: 10, type: "true_false", question: "API返回的数据格式通常只有JSON一种。", correctAnswer: false, explanation: "API可以返回多种格式，包括JSON、XML、YAML、CSV等。" },
+        ]
+      }
+    },
+    {
+      id: 4,
+      title: "数据清洗",
+      content: "本章学习数据清洗的核心技术，包括缺失值处理、异常值检测、数据去重和数据类型转换，让数据变得干净可用。",
+      codeExamples: [
+        { title: "处理缺失值", code: `import pandas as pd
+import numpy as np
+data = {
+    'A': [1, 2, np.nan, 4, 5],
+    'B': [np.nan, 2, 3, np.nan, 5],
+    'C': [1, 2, 3, 4, 5]
+}
+df = pd.DataFrame(data)
+print(df.isnull().sum())
+df_filled = df.fillna(df.mean())
+print("填充后：")
+print(df_filled)` },
+        { title: "数据去重", code: `import pandas as pd
+data = {
+    'name': ['张三', '李四', '张三', '王五', '李四'],
+    'age': [20, 25, 20, 30, 25],
+    'score': [85, 90, 85, 88, 90]
+}
+df = pd.DataFrame(data)
+print(f"重复行数：{df.duplicated().sum()}")
+df_unique = df.drop_duplicates()
+print("去重后：")
+print(df_unique)` },
+        { title: "数据类型转换", code: `import pandas as pd
+data = {
+    'price': ['￥100', '￥200', '￥300'],
+    'date': ['2024-01-01', '2024-01-02', '2024-01-03'],
+    'sales': ['1000', '2000', '3000']
+}
+df = pd.DataFrame(data)
+print("原始类型：")
+print(df.dtypes)
+df['price'] = df['price'].str.replace('￥', '').astype(float)
+df['date'] = pd.to_datetime(df['date'])
+df['sales'] = pd.to_numeric(df['sales'])
+print("\\n转换后类型：")
+print(df.dtypes)` },
+      ],
+      exercises: [
+        {
+          id: 1,
+          type: "coding",
+          question: "购物车管理：编写一个管理购物车的程序，支持添加商品、计算总价、删除商品",
+          starterCode: `def shopping_cart():
+    cart = {}
+    # 在这里编写代码
+shopping_cart()`,
+          solution: `def shopping_cart():
+    cart = {}
+    while True:
+        print("\\n=== 购物车管理 ===")
+        print("1. 添加商品")
+        print("2. 查看购物车")
+        print("3. 删除商品")
+        print("4. 计算总价")
+        print("5. 退出")
+        choice = input("请选择：")
+        if choice == '1':
+            name = input("商品名：")
+            price = float(input("价格："))
+            qty = int(input("数量："))
+            if name in cart: cart[name]['qty'] += qty
+            else: cart[name] = {'price': price, 'qty': qty}
+            print(f"已添加 {name} x{qty}")
+        elif choice == '2':
+            if not cart: print("购物车为空")
+            else:
+                total = 0
+                for name, info in cart.items():
+                    subtotal = info['price'] * info['qty']
+                    total += subtotal
+                    print(f"{name}: {info['price']}元 x{info['qty']} = {subtotal}元")
+                print(f"合计：{total}元")
+        elif choice == '3':
+            name = input("要删除的商品名：")
+            if name in cart:
+                del cart[name]
+                print(f"已删除 {name}")
+        elif choice == '4':
+            total = sum(i['price']*i['qty'] for i in cart.values())
+            print(f"购物车总价：{total}元")
+        elif choice == '5':
+            print("再见！")
+            break
+shopping_cart()`,
+          explanation: "使用嵌套字典存储购物车数据，键为商品名，值为包含价格和数量的字典。通过循环和条件语句实现菜单功能。",
+          commonErrors: [
+            { error: "重复商品处理", description: "添加已有商品时没有累加数量而是覆盖", solution: "先判断是否存在，存在则增加数量" },
+          ]
+        },
+        {
+          id: 2,
+          type: "coding",
+          question: "数据去重练习：创建一个含重复元素的列表，实现去重并保持原有顺序",
+          starterCode: `def deduplicate():
+    items = ['苹果', '香蕉', '苹果', '橙子', '香蕉', '葡萄', '苹果']
+    # 在这里编写代码
+deduplicate()`,
+          solution: `def deduplicate():
+    items = ['苹果', '香蕉', '苹果', '橙子', '香蕉', '葡萄', '苹果']
+    print(f"原始列表：{items}")
+    # 方法一：使用 dict.fromkeys() 保持顺序
+    unique1 = list(dict.fromkeys(items))
+    print(f"去重后（保持顺序）：{unique1}")
+    # 方法二：使用 set
+    unique2 = list(set(items))
+    print(f"去重后（set方法）：{unique2}")
+deduplicate()`,
+          explanation: "Python 3.7+中 dict.fromkeys() 保持插入顺序。如果不关心顺序，直接使用 set() 是最高效的方法。",
+          commonErrors: [
+            { error: "顺序丢失", description: "使用 set() 去重后元素顺序被打乱", solution: "需要保持顺序时使用 dict.fromkeys() 或手动遍历" },
+          ]
+        },
+        {
+          id: 3,
+          type: "coding",
+          question: "简单的数据统计：编写代码统计列表中各元素出现的次数并排序",
+          starterCode: `from collections import Counter
+def count_items():
+    fruits = ['苹果', '香蕉', '苹果', '橙子', '香蕉', '苹果', '葡萄', '苹果', '香蕉', '橙子']
+    # 在这里编写代码
+count_items()`,
+          solution: `from collections import Counter
+def count_items():
+    fruits = ['苹果', '香蕉', '苹果', '橙子', '香蕉', '苹果', '葡萄', '苹果', '香蕉', '橙子']
+    counter = Counter(fruits)
+    print("各元素出现次数：")
+    for fruit, count in counter.items():
+        print(f"  {fruit}: {count}次")
+    print("\\n按次数排序：")
+    for i, (f, c) in enumerate(counter.most_common(), 1):
+        print(f"  第{i}名：{f}（{c}次）")
+count_items()`,
+          explanation: "collections.Counter 是Python内置的高效计数器，most_common() 方法可以直接返回排序结果。",
+          commonErrors: [
+            { error: "字典键不存在", description: "手动统计时直接访问未初始化的键", solution: "使用 get(key, 0) 或 defaultdict(int)" },
+          ]
+        },
+      ],
+      quiz: {
+        multipleChoice: [
+          { id: 1, type: "multiple_choice", question: "检查DataFrame中缺失值使用哪个方法？", options: ["df.empty()", "df.isnull()", "df.missing()", "df.nan()"], correctAnswer: "df.isnull()", explanation: "isnull() 返回布尔值的DataFrame，缺失值位置为True。" },
+          { id: 2, type: "multiple_choice", question: "填充缺失值使用哪个方法？", options: ["df.replace()", "df.fillna()", "df.setna()", "df.clean()"], correctAnswer: "df.fillna()", explanation: "fillna() 用指定值或策略填充缺失值。" },
+          { id: 3, type: "multiple_choice", question: "df.dropna() 默认行为是什么？", options: ["删除含有缺失值的列", "删除含有缺失值的行", "填充缺失值", "不做任何操作"], correctAnswer: "删除含有缺失值的行", explanation: "dropna() 默认删除任何含有缺失值的行。" },
+          { id: 4, type: "multiple_choice", question: "检测重复行使用哪个方法？", options: ["df.unique()", "df.duplicated()", "df.repeated()", "df.count_dup()"], correctAnswer: "df.duplicated()", explanation: "duplicated() 返回布尔Series，标记重复的行。" },
+          { id: 5, type: "multiple_choice", question: "将列转换为整数类型使用哪个方法？", options: [".to_int()", ".astype(int)", ".convert(int)", ".asint()"], correctAnswer: ".astype(int)", explanation: "astype() 是Pandas数据类型转换的标准方法。" },
+          { id: 6, type: "multiple_choice", question: "处理异常值的第一步通常是什么？", options: ["直接删除", "识别和分析", "用均值替换", "忽略不管"], correctAnswer: "识别和分析", explanation: "发现异常值后首先要分析其来源，再决定处理方式。" },
+          { id: 7, type: "multiple_choice", question: "IQR（四分位距）在异常值检测中的作用是什么？", options: ["计算均值", "定义异常值的边界", "替代缺失值", "转换数据类型"], correctAnswer: "定义异常值的边界", explanation: "IQR = Q3 - Q1，常用规则：小于 Q1-1.5*IQR 或大于 Q3+1.5*IQR 的值视为异常值。" },
+          { id: 8, type: "multiple_choice", question: "去除DataFrame中的重复行使用哪个方法？", options: ["df.drop_duplicates()", "df.unique()", "df.dedup()", "df.remove_dup()"], correctAnswer: "df.drop_duplicates()", explanation: "drop_duplicates() 删除完全相同的重复行。" },
+          { id: 9, type: "multiple_choice", question: "将字符串日期转换为日期类型使用哪个函数？", options: ["pd.Date()", "pd.to_datetime()", "pd.convert_date()", "pd.date()"], correctAnswer: "pd.to_datetime()", explanation: "pd.to_datetime() 可以智能解析各种格式的日期字符串。" },
+          { id: 10, type: "multiple_choice", question: "df.describe() 输出中不包含哪个统计量？", options: ["mean", "count", "median", "std"], correctAnswer: "median", explanation: "describe() 输出 count、mean、std、min、25%、50%、75%、max，其中 50%就是中位数，但名称不叫 median。" },
+        ],
+        trueFalse: [
+          { id: 1, type: "true_false", question: "缺失值是指数据中不存在的值，空字符串也算作缺失值。", correctAnswer: false, explanation: "Pandas中默认只将 NaN 和 None 视作缺失值。空字符串不被视为缺失值。" },
+          { id: 2, type: "true_false", question: "fillna() 可以用均值、中位数或前一个有效值来填充缺失值。", correctAnswer: true, explanation: "fillna() 接受具体值，也可以使用 method=ffill 前向填充等策略。" },
+          { id: 3, type: "true_false", question: "drop_duplicates() 保留首次出现的行，删除后续重复的行。", correctAnswer: true, explanation: "默认保留第一次出现的行，可以通过 keep=last 保留最后一行。" },
+          { id: 4, type: "true_false", question: "发现异常值后必须将其删除，否则分析结果一定不准确。", correctAnswer: false, explanation: "异常值不一定是错误，可能是真实存在的极端情况，需要先分析原因。" },
+          { id: 5, type: "true_false", question: "包含非数字字符的字符串可以直接通过 astype(int) 转换为整数。", correctAnswer: false, explanation: "含有非数字字符的字符串必须先清理掉非数字字符，才能进行类型转换。" },
+          { id: 6, type: "true_false", question: "df.replace() 可以用来替换数据中的特定值。", correctAnswer: true, explanation: "replace() 可以替换指定的值，支持一对一、多对一和字典映射替换。" },
+          { id: 7, type: "true_false", question: "一个DataFrame中不同列可以有不同的数据类型。", correctAnswer: true, explanation: "DataFrame是二维表格结构，每一列有独立的数据类型。" },
+          { id: 8, type: "true_false", question: "drop_duplicates() 只删除所有列都相同的重复行。", correctAnswer: true, explanation: "默认比较所有列判断重复，可以通过 subset 参数指定只比较某些列。" },
+          { id: 9, type: "true_false", question: "ffill() 前向填充是用上一个非缺失值来填充当前缺失位置。", correctAnswer: true, explanation: "ffill (forward fill) 用前一个有效值填充。" },
+          { id: 10, type: "true_false", question: "df['col'].unique() 会删除DataFrame中的重复行。", correctAnswer: false, explanation: "unique() 返回列中唯一值的数组（一维），它不会修改DataFrame。删除重复行应该用 drop_duplicates()。" },
+        ]
+      }
+    },
+    {
+      id: 5,
+      title: "数据可视化",
+      content: "本章学习使用Matplotlib和Seaborn创建专业的数据可视化图表，掌握折线图、柱状图、散点图等常用图表的绘制方法。",
+      codeExamples: [
+        { title: "创建折线图", code: `import matplotlib.pyplot as plt
+months = ['1月', '2月', '3月', '4月', '5月', '6月']
+sales = [120, 150, 180, 160, 200, 230]
+plt.figure(figsize=(10, 6))
+plt.plot(months, sales, marker='o', linewidth=2, color='blue')
+plt.title('2024年上半年销售趋势', fontsize=14)
+plt.xlabel('月份', fontsize=12)
+plt.ylabel('销售额（万元）', fontsize=12)
+plt.grid(True, alpha=0.3)
+plt.show()` },
+        { title: "创建柱状图", code: `import matplotlib.pyplot as plt
+categories = ['产品A', '产品B', '产品C', '产品D', '产品E']
+values = [350, 280, 420, 180, 300]
+plt.figure(figsize=(10, 6))
+bars = plt.bar(categories, values, color=['#4CAF50', '#2196F3', '#FF9800', '#F44336', '#9C27B0'])
+plt.title('各产品销售额对比', fontsize=14)
+for bar in bars:
+    height = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/2., height + 5,
+             f'{height}', ha='center', fontsize=10)
+plt.show()` },
+        { title: "创建散点图", code: `import matplotlib.pyplot as plt
+import numpy as np
+np.random.seed(42)
+x = np.random.rand(100) * 10
+y = 2 * x + np.random.randn(100) * 3 + 5
+plt.figure(figsize=(10, 6))
+plt.scatter(x, y, alpha=0.6, c='red', s=50)
+plt.title('广告投入与销售额关系', fontsize=14)
+plt.xlabel('广告投入（万元）', fontsize=12)
+plt.ylabel('销售额（万元）', fontsize=12)
+plt.grid(True, alpha=0.3)
+plt.show()` },
+      ],
+      exercises: [
+        {
+          id: 1,
+          type: "coding",
+          question: "骰子游戏：编写模拟掷骰子游戏，统计各种点数出现次数并用柱状图展示",
+          starterCode: `import random
+import matplotlib.pyplot as plt
+def dice_game(rolls=1000):
+    # 在这里编写代码
+dice_game()`,
+          solution: `import random
+import matplotlib.pyplot as plt
+from collections import Counter
+def dice_game(rolls=1000):
+    results = [random.randint(1, 6) for _ in range(rolls)]
+    counter = Counter(results)
+    print(f"投掷 {rolls} 次骰子结果：")
+    for num in range(1, 7):
+        count = counter.get(num, 0)
+        print(f"点数 {num}: {count}次")
+    nums = list(range(1, 7))
+    counts = [counter.get(num, 0) for num in nums]
+    plt.figure(figsize=(10, 6))
+    plt.bar(nums, counts, color='steelblue')
+    plt.title(f'骰子模拟结果（共{rolls}次）', fontsize=14)
+    plt.xlabel('点数', fontsize=12)
+    plt.ylabel('出现次数', fontsize=12)
+    plt.xticks(nums)
+    plt.show()
+dice_game()`,
+          explanation: "使用列表推导式和 random.randint() 模拟掷骰子，Counter 统计各点数次数，用柱状图可视化。",
+          commonErrors: [
+            { error: "未设置随机种子", description: "结果不可复现", solution: "可添加 random.seed() 使结果固定" },
+          ]
+        },
+        {
+          id: 2,
+          type: "coding",
+          question: "简单统计计算：编写代码生成随机数据并计算基础统计量，然后绘制折线图",
+          starterCode: `import random
+import matplotlib.pyplot as plt
+def stats_and_plot():
+    # 在这里编写代码
+stats_and_plot()`,
+          solution: `import random
+import matplotlib.pyplot as plt
+def stats_and_plot():
+    random.seed(42)
+    months = list(range(1, 13))
+    sales = [random.randint(50, 200) for _ in range(12)]
+    total = sum(sales)
+    avg = total / len(sales)
+    print(f"月度销售：总数={total}, 平均={avg:.1f}")
+    plt.figure(figsize=(12, 6))
+    plt.plot(months, sales, marker='o', linewidth=2, color='orange', label='销售额')
+    plt.axhline(y=avg, color='red', linestyle='--', label=f'平均值={avg:.1f}')
+    plt.title('月度销售走势图', fontsize=14)
+    plt.xlabel('月份', fontsize=12)
+    plt.ylabel('销售额', fontsize=12)
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.xticks(months)
+    plt.show()
+stats_and_plot()`,
+          explanation: "使用 random.randint() 生成随机数据，计算统计量，然后用折线图展示趋势。",
+          commonErrors: [
+            { error: "刻度不清晰", description: "未设置 xticks 导致横坐标显示不全", solution: "使用 plt.xticks() 设置清晰的刻度" },
+          ]
+        },
+        {
+          id: 3,
+          type: "coding",
+          question: "列表操作：编写代码将两个列表中的数据绘制成对比柱状图",
+          starterCode: `import matplotlib.pyplot as plt
+def compare_chart():
+    subjects = ['语文', '数学', '英语', '物理', '化学']
+    class_a = [85, 78, 92, 70, 80]
+    class_b = [80, 88, 85, 75, 86]
+    # 在这里编写代码
+compare_chart()`,
+          solution: `import matplotlib.pyplot as plt
+import numpy as np
+def compare_chart():
+    subjects = ['语文', '数学', '英语', '物理', '化学']
+    class_a = [85, 78, 92, 70, 80]
+    class_b = [80, 88, 85, 75, 86]
+    x = np.arange(len(subjects))
+    width = 0.35
+    fig, ax = plt.subplots(figsize=(12, 6))
+    bars1 = ax.bar(x - width/2, class_a, width, label='A班', color='#4CAF50')
+    bars2 = ax.bar(x + width/2, class_b, width, label='B班', color='#2196F3')
+    ax.set_xlabel('科目', fontsize=12)
+    ax.set_ylabel('平均分', fontsize=12)
+    ax.set_title('两班成绩对比', fontsize=14)
+    ax.set_xticks(x)
+    ax.set_xticklabels(subjects)
+    ax.legend()
+    plt.grid(axis='y', alpha=0.3)
+    plt.tight_layout()
+    plt.show()
+compare_chart()`,
+          explanation: "使用 numpy.arange() 创建位置索引，通过调整柱子位置实现并排柱状图。",
+          commonErrors: [
+            { error: "柱子重叠", description: "两班柱子位置设置错误导致完全重叠", solution: "使用 x +/- width/2 分别设置两组柱子位置" },
+          ]
+        },
+      ],
+      quiz: {
+        multipleChoice: [
+          { id: 1, type: "multiple_choice", question: "Matplotlib中用于创建新画布的函数是？", options: ["plt.new()", "plt.figure()", "plt.canvas()", "plt.create()"], correctAnswer: "plt.figure()", explanation: "plt.figure() 创建一个新的画布对象，figsize 参数可以设置画布大小。" },
+          { id: 2, type: "multiple_choice", question: "绘制折线图使用哪个函数？", options: ["plt.line()", "plt.plot()", "plt.linechart()", "plt.draw()"], correctAnswer: "plt.plot()", explanation: "plt.plot() 是Matplotlib最基础的绘图函数，用于绘制折线图和线条。" },
+          { id: 3, type: "multiple_choice", question: "设置图表标题使用哪个函数？", options: ["plt.title()", "plt.name()", "plt.label()", "plt.header()"], correctAnswer: "plt.title()", explanation: "plt.title() 设置图表的主标题。" },
+          { id: 4, type: "multiple_choice", question: "绘制柱状图使用哪个函数？", options: ["plt.bar()", "plt.column()", "plt.barplot()", "plt.hist()"], correctAnswer: "plt.bar()", explanation: "plt.bar() 绘制柱状图。" },
+          { id: 5, type: "multiple_choice", question: "绘制散点图使用哪个函数？", options: ["plt.point()", "plt.scatter()", "plt.dot()", "plt.spread()"], correctAnswer: "plt.scatter()", explanation: "plt.scatter() 专门用于绘制散点图。" },
+          { id: 6, type: "multiple_choice", question: "添加图例使用哪个函数？", options: ["plt.legend()", "plt.key()", "plt.note()", "plt.explain()"], correctAnswer: "plt.legend()", explanation: "plt.legend() 添加图例，需要配合绘图函数中的 label 参数使用。" },
+          { id: 7, type: "multiple_choice", question: "设置图形元素透明度使用哪个参数？", options: ["trans", "alpha", "beta", "opacity"], correctAnswer: "alpha", explanation: "alpha 参数设置透明度，取值范围 0-1。" },
+          { id: 8, type: "multiple_choice", question: "设置折线图中数据点标记样式使用哪个参数？", options: ["mark", "symbol", "marker", "dot"], correctAnswer: "marker", explanation: "marker 参数设置数据点的形状标记，如 'o' 圆形、's' 方形等。" },
+          { id: 9, type: "multiple_choice", question: "设置线条粗细使用哪个参数？", options: ["thickness", "linewidth", "width", "lw2"], correctAnswer: "linewidth", explanation: "linewidth（或简写为 lw）设置线条的粗细。" },
+          { id: 10, type: "multiple_choice", question: "Seaborn库与Matplotlib的关系是什么？", options: ["完全无关", "Seaborn基于Matplotlib", "Matplotlib基于Seaborn", "两者互相竞争"], correctAnswer: "Seaborn基于Matplotlib", explanation: "Seaborn是在Matplotlib基础上构建的高级绘图库，提供更美观的默认样式。" },
+        ],
+        trueFalse: [
+          { id: 1, type: "true_false", question: "使用 plt.show() 可以在终端或Notebook中显示绘制的图形。", correctAnswer: true, explanation: "plt.show() 是显示图形的标准方式。" },
+          { id: 2, type: "true_false", question: "plt.grid(True) 可以在图表中添加网格线。", correctAnswer: true, explanation: "grid(True) 显示网格线。" },
+          { id: 3, type: "true_false", question: "在一个图中只能绘制一条折线，不能同时绘制多条。", correctAnswer: false, explanation: "可以在同一个 figure 中多次调用 plt.plot() 绘制多条线。" },
+          { id: 4, type: "true_false", question: "plt.tight_layout() 可以自动调整子图布局防止重叠。", correctAnswer: true, explanation: "tight_layout() 自动调整子图间距，优化标签位置。" },
+          { id: 5, type: "true_false", question: "Matplotlib的 color 参数只能接受英文颜色名。", correctAnswer: false, explanation: "color 支持多种格式：颜色名、十六进制代码、RGB元组、灰度值等。" },
+          { id: 6, type: "true_false", question: "箱线图（Box Plot）可以展示数据的中位数、四分位数和异常值。", correctAnswer: true, explanation: "箱线图通过箱体展示四分位距，线条展示中位数和极值范围。" },
+          { id: 7, type: "true_false", question: "饼图适合展示数据的时间序列变化趋势。", correctAnswer: false, explanation: "饼图用于展示各部分占整体的比例，时间趋势应该用折线图或柱状图。" },
+          { id: 8, type: "true_false", question: "seaborn的 histplot() 可以绘制直方图展示数据分布。", correctAnswer: true, explanation: "histplot() 是Seaborn绘制直方图的函数。" },
+          { id: 9, type: "true_false", question: "plt.savefig() 可以将图表保存为PNG、JPG、PDF等格式文件。", correctAnswer: true, explanation: "savefig() 根据文件扩展名自动确定格式。" },
+          { id: 10, type: "true_false", question: "设置横坐标标签使用 plt.xlabel()，纵坐标标签使用 plt.ylabel()。", correctAnswer: true, explanation: "xlabel() 和 ylabel() 分别设置x轴和y轴的标签文字。" },
+        ]
+      }
+    },
+    {
+      id: 6,
+      title: "统计分析基础",
+      content: "本章学习统计分析基础知识，包括描述性统计、假设检验、相关分析和回归分析基础，掌握用数据进行科学推断的能力。",
+      codeExamples: [
+        { title: "描述性统计", code: `import pandas as pd
+import numpy as np
+np.random.seed(42)
+data = pd.Series(np.random.randn(1000) * 10 + 50)
+print(f"平均值: {data.mean():.2f}")
+print(f"中位数: {data.median():.2f}")
+print(f"标准差: {data.std():.2f}")
+print(f"最大值: {data.max():.2f}")
+print(f"最小值: {data.min():.2f}")
+print("\\nPandas describe：")
+print(data.describe())` },
+        { title: "相关性分析", code: `import pandas as pd
+import numpy as np
+np.random.seed(42)
+x = np.random.rand(100) * 10
+y = 2 * x + np.random.randn(100) * 2
+df = pd.DataFrame({'广告投入': x, '销售额': y})
+corr_matrix = df.corr()
+print("相关系数矩阵：")
+print(corr_matrix)` },
+        { title: "假设检验示例", code: `import numpy as np
+from scipy import stats
+np.random.seed(42)
+group_a = np.random.normal(85, 5, 30)
+group_b = np.random.normal(80, 6, 30)
+print(f"A班平均分: {group_a.mean():.2f}")
+print(f"B班平均分: {group_b.mean():.2f}")
+t_stat, p_value = stats.ttest_ind(group_a, group_b)
+print(f"t统计量: {t_stat:.4f}")
+print(f"p值: {p_value:.4f}")
+if p_value < 0.05:
+    print("结论: p < 0.05，两班成绩存在显著差异")
+else:
+    print("结论: p >= 0.05，两班成绩无显著差异")` },
+      ],
+      exercises: [
+        {
+          id: 1,
+          type: "coding",
+          question: "猜数字2.0电脑猜：编写让电脑自动猜测数字的程序，用二分法优化效率",
+          starterCode: `import random
+def computer_guess():
+    # 在这里编写代码
+computer_guess()`,
+          solution: `import random
+def computer_guess():
+    print("请在心中想一个1-1000之间的数字")
+    low = 1
+    high = 1000
+    attempts = 0
+    while low <= high:
+        guess = (low + high) // 2
+        attempts += 1
+        print(f"\\n电脑猜测第{attempts}次：{guess}")
+        feedback = input("请回答(>/</=)：").strip()
+        if feedback == '=':
+            print(f"电脑用{attempts}次猜中了你的数字！")
+            break
+        elif feedback == '>':
+            high = guess - 1
+        elif feedback == '<':
+            low = guess + 1
+        else:
+            print("请输入有效的符号")
+            continue
+    print(f"共尝试 {attempts} 次")
+computer_guess()`,
+          explanation: "二分法每次将搜索范围缩小一半，时间复杂度为 O(log n)。在1-1000范围内，最多只需10次猜测。",
+          commonErrors: [
+            { error: "边界更新错误", description: "更新 low/high 时忘记加减1导致死循环", solution: "太大时 high=guess-1，太小时 low=guess+1" },
+          ]
+        },
+        {
+          id: 2,
+          type: "coding",
+          question: "简单的统计计算：编写代码生成数据并计算偏度和峰度，理解数据分布特征",
+          starterCode: `import numpy as np
+from scipy import stats
+def distribution_analysis():
+    # 在这里编写代码
+distribution_analysis()`,
+          solution: `import numpy as np
+from scipy import stats
+def distribution_analysis():
+    np.random.seed(42)
+    normal_data = np.random.normal(50, 10, 1000)
+    skewed_data = np.random.exponential(20, 1000) + 20
+    uniform_data = np.random.uniform(20, 80, 1000)
+    datasets = {'正态分布': normal_data, '右偏分布': skewed_data, '均匀分布': uniform_data}
+    print("=== 分布特征分析 ===")
+    for name, data in datasets.items():
+        mean = np.mean(data)
+        median = np.median(data)
+        std = np.std(data)
+        skewness = stats.skew(data)
+        kurtosis = stats.kurtosis(data)
+        print(f"{name}: 均值={mean:.1f}, 中位数={median:.1f}, 标准差={std:.1f}, 偏度={skewness:.2f}, 峰度={kurtosis:.2f}")
+distribution_analysis()`,
+          explanation: "偏度衡量分布的对称性，峰度衡量分布的陡峭程度。结合均值和中位数关系可以判断分布形状。",
+          commonErrors: [
+            { error: "样本与总体混淆", description: "未注意某些库默认计算的是样本统计量", solution: "注意查看文档是否需要调整参数（如 ddof）" },
+          ]
+        },
+        {
+          id: 3,
+          type: "coding",
+          question: "数据分析练习：编写代码计算两组数据的相关系数并进行线性回归拟合",
+          starterCode: `import numpy as np
+from scipy import stats
+import matplotlib.pyplot as plt
+def regression_analysis():
+    # 在这里编写代码
+regression_analysis()`,
+          solution: `import numpy as np
+from scipy import stats
+import matplotlib.pyplot as plt
+def regression_analysis():
+    hours = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+    scores = np.array([45, 55, 60, 68, 75, 82, 88, 92, 95, 98])
+    corr, _ = stats.pearsonr(hours, scores)
+    print(f"Pearson相关系数: {corr:.4f}")
+    slope, intercept, r_value, p_val, std_err = stats.linregress(hours, scores)
+    print(f"回归方程: 分数 = {slope:.2f} x 时长 + {intercept:.2f}")
+    print(f"R^2: {r_value**2:.4f}")
+    for h in [3.5, 7.5]:
+        pred = slope * h + intercept
+        print(f"学习{h}小时，预测得分: {pred:.1f}分")
+    plt.figure(figsize=(10, 6))
+    plt.scatter(hours, scores, color='blue', s=100, label='实际数据')
+    x_line = np.linspace(min(hours), max(hours), 100)
+    plt.plot(x_line, slope * x_line + intercept, 'r-', linewidth=2, label='回归线')
+    plt.xlabel('学习时长（小时）', fontsize=12)
+    plt.ylabel('考试分数', fontsize=12)
+    plt.title('学习时长与分数关系（线性回归）', fontsize=14)
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.show()
+regression_analysis()`,
+          explanation: "使用 scipy.stats.linregress() 进行最小二乘线性回归，得到斜率、截距和R^2。R^2越接近1，模型拟合越好。",
+          commonErrors: [
+            { error: "因果误解", description: "把相关性误判为因果关系", solution: "相关不代表因果，需谨慎解读回归结果" },
+          ]
+        },
+      ],
+      quiz: {
+        multipleChoice: [
+          { id: 1, type: "multiple_choice", question: "以下哪个统计量最能反映数据的集中趋势？", options: ["标准差", "均值", "方差", "相关系数"], correctAnswer: "均值", explanation: "均值、中位数、众数都是描述数据集中趋势的统计量。" },
+          { id: 2, type: "multiple_choice", question: "标准差描述的是什么？", options: ["数据的平均值", "数据的分散程度", "数据的最大值", "数据的个数"], correctAnswer: "数据的分散程度", explanation: "标准差衡量数据与其均值的平均距离，反映数据的离散程度。" },
+          { id: 3, type: "multiple_choice", question: "相关系数的取值范围是？", options: ["0 到 1", "-1 到 1", "0 到 100", "-100 到 100"], correctAnswer: "-1 到 1", explanation: "相关系数取值范围为 -1 到 1。1表示完全正相关，-1表示完全负相关。" },
+          { id: 4, type: "multiple_choice", question: "在假设检验中，通常以什么标准判断结果是否显著？", options: ["p < 0.5", "p < 0.05", "p > 0.05", "p = 0"], correctAnswer: "p < 0.05", explanation: "通常将显著性水平 α 设为 0.05，当 p < 0.05 时拒绝原假设。" },
+          { id: 5, type: "multiple_choice", question: "如果一组数据服从标准正态分布，其均值、中位数、众数的关系是？", options: ["均值 > 中位数 > 众数", "三者相等", "均值 < 中位数 < 众数", "没有固定关系"], correctAnswer: "三者相等", explanation: "正态分布是对称分布，均值、中位数和众数完全相同。" },
+          { id: 6, type: "multiple_choice", question: "在t检验中，原假设(H0)通常是什么？", options: ["两组存在显著差异", "两组没有显著差异", "一定存在差异", "无法判断"], correctAnswer: "两组没有显著差异", explanation: "原假设通常假设无效应、无差异、无关联，即默认没有显著效果。" },
+          { id: 7, type: "multiple_choice", question: "t检验主要用于什么？", options: ["比较多组均值", "比较两组均值的差异", "分析相关性", "描述数据分布"], correctAnswer: "比较两组均值的差异", explanation: "t检验用于比较两组的均值是否存在显著差异。" },
+          { id: 8, type: "multiple_choice", question: "相关分析可以揭示变量之间的什么关系？", options: ["因果关系", "线性关系的强度", "时间顺序", "确定性关系"], correctAnswer: "线性关系的强度", explanation: "相关系数仅衡量线性关系的强度和方向，不代表因果关系。" },
+          { id: 9, type: "multiple_choice", question: "置信水平 95% 意味着什么？", options: ["有95%的概率真实值在置信区间内", "数据有95%的准确率", "95%的数据在范围内", "误差为5%"], correctAnswer: "有95%的概率真实值在置信区间内", explanation: "95%置信水平意味着重复抽样时，约95%的区间会包含真实的总体参数。" },
+          { id: 10, type: "multiple_choice", question: "方差与标准差的关系是什么？", options: ["方差 = 标准差", "方差 = 标准差的平方", "方差 = 标准差的平方根", "没有直接关系"], correctAnswer: "方差 = 标准差的平方", explanation: "方差是标准差的平方，两者都是衡量数据离散程度的指标。" },
+        ],
+        trueFalse: [
+          { id: 1, type: "true_false", question: "均值对异常值非常敏感，极端值会显著影响均值结果。", correctAnswer: true, explanation: "均值受所有数据影响，极端值会将均值拉向它们。相比之下，中位数对异常值更稳健。" },
+          { id: 2, type: "true_false", question: "相关系数为0说明两个变量之间完全没有关系。", correctAnswer: false, explanation: "相关系数为0仅说明无线性关系，但可能存在非线性关系。" },
+          { id: 3, type: "true_false", question: "大数定律表明样本量越大，样本均值越接近总体均值。", correctAnswer: true, explanation: "大数定律保证样本量足够大时，样本统计量会稳定地接近总体参数。" },
+          { id: 4, type: "true_false", question: "拒绝原假设意味着原假设一定是错误的。", correctAnswer: false, explanation: "拒绝原假设只表示统计证据不足以支持它，并不意味着它绝对错误。" },
+          { id: 5, type: "true_false", question: "z分数（标准分数）表示一个值距离均值有多少个标准差。", correctAnswer: true, explanation: "z = (x - 均值) / 标准差，表示x相对于均值的位置。" },
+          { id: 6, type: "true_false", question: "显著性水平 α 是犯第一类错误（假阳性）的概率上限。", correctAnswer: true, explanation: "α 是预先设定的显著性阈值，代表愿意容忍的假阳性错误率。" },
+          { id: 7, type: "true_false", question: "线性回归分析可以确定变量之间的因果关系。", correctAnswer: false, explanation: "回归分析展示变量之间的预测关系，但不能确定因果方向。因果关系需要实验设计或逻辑推断。" },
+          { id: 8, type: "true_false", question: "中位数是将数据排序后位于中间位置的值。", correctAnswer: true, explanation: "中位数将数据分为两半，50%的数据小于中位数，50%大于中位数。" },
+          { id: 9, type: "true_false", question: "变异系数（CV）= 标准差 / 均值，用于比较不同数据组的离散程度。", correctAnswer: true, explanation: "变异系数消除了量纲和均值大小的影响，可用于比较不同量级数据的离散程度。" },
+          { id: 10, type: "true_false", question: "数据清洗和数据预处理不属于数据分析的必要步骤。", correctAnswer: false, explanation: "数据清洗是数据分析的基础和核心步骤。低质量数据会导致错误结论。" },
+        ]
+      }
+    }
     ]
   }
 ];
 
-// 导出所有课程
 export default courses;
